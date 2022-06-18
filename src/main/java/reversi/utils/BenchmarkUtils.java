@@ -1,6 +1,6 @@
-package utils;
+package reversi.utils;
 
-public class Benchmark
+public class BenchmarkUtils
 {
     private static long startTime;
 
@@ -10,6 +10,6 @@ public class Benchmark
 
     public static void end() {
         long totalTime = System.currentTimeMillis() - startTime;
-        System.out.println("Benchmark: " + totalTime);
+        System.out.println("Benchmark: " + totalTime + " ms");
     }
 }

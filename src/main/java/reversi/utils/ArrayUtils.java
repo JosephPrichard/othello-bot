@@ -1,4 +1,4 @@
-package utils;
+package reversi.utils;
 
 public class ArrayUtils
 {

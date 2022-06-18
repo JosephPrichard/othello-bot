@@ -1,6 +1,6 @@
-package board;
+package reversi.board;
 
-import utils.ArrayUtils;
+import reversi.utils.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +11,10 @@ public final class ReversiBoard
     public static final byte WHITE = 1;
     public static final byte BLACK = 2;
 
-    private static final int[][] BOARD_DIRECTIONS = {
-        {0, 1}, {0, -1}, {1, 0}, {-1, 0},
-        {-1, -1}, {-1, 1}, {-1, 1}, {1, 1}
-    };
+    private static final int[][] BOARD_DIRECTIONS = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {-1, -1}, {-1, 1}, {-1, 1}, {1, 1}};
+    private static final int[][] BOARD_CORNERS = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
 
     private byte[][] board;
-    private int numWhitePieces;
-    private int numBlackPieces;
     private boolean blackMove;
 
     public ReversiBoard() {
@@ -34,14 +30,16 @@ public final class ReversiBoard
         board[getBoardSize() / 2][getBoardSize() / 2 - 1] = BLACK;
 
         blackMove = true;
-        numWhitePieces = numBlackPieces = 2;
     }
 
     public ReversiBoard(ReversiBoard reversiBoard) {
         this.board = ArrayUtils.deepCopyOf2DArray(reversiBoard.board);
         this.blackMove = reversiBoard.blackMove;
-        this.numWhitePieces = reversiBoard.numWhitePieces;
-        this.numBlackPieces = reversiBoard.numBlackPieces;
+    }
+
+    public ReversiBoard(byte[][] board, boolean blackMove) {
+        this.board = ArrayUtils.deepCopyOf2DArray(board);
+        this.blackMove = blackMove;
     }
 
     public int getBoardSize() {
@@ -56,22 +54,68 @@ public final class ReversiBoard
         return blackMove;
     }
 
-    public int whiteScore() {
-        return numWhitePieces;
+    public float whiteScore() {
+        return findPieces(WHITE).size();
     }
 
-    public int blackScore() {
-        return numBlackPieces;
+    public float blackScore() {
+        return findPieces(BLACK).size();
     }
 
     public ReversiBoard copy() {
         return new ReversiBoard(this);
     }
 
+    public float parityHeuristic() {
+        float whiteScore = 0f;
+        float blackScore = 0f;
+        for (int i = 0; i < getBoardSize(); i++) {
+            for (int j = 0; j < getBoardSize(); j++) {
+                if (board[i][j] == WHITE)
+                    whiteScore++;
+                if (board[i][j] == BLACK)
+                    blackScore++;
+            }
+        }
+        return 100f * (blackScore - whiteScore) / (blackScore + whiteScore);
+    }
+
+    public float cornerHeuristic() {
+        int whiteCorners = 0;
+        int blackCorners = 0;
+        int farCorner = getBoardSize() - 1;
+        // iterate over corners and calculate the number of white and black corners
+        for (int[] corner : BOARD_CORNERS) {
+            byte currentColor = board[farCorner * corner[0]][farCorner * corner[1]];
+            if (currentColor == WHITE) {
+                whiteCorners++;
+            } else if (currentColor == BLACK) {
+                blackCorners++;
+            }
+        }
+        if (blackCorners + whiteCorners == 0) {
+            return 0f;
+        }
+        return 100f * (blackCorners - whiteCorners) / (blackCorners + whiteCorners);
+    }
+
+    public float mobilityHeuristic() {
+        int whiteMoves = countPotentialMoves(WHITE);
+        int blackMoves = countPotentialMoves(BLACK);
+        if (whiteMoves + blackMoves == 0) {
+            return 0f;
+        }
+        return 100f * (blackMoves - whiteMoves) / (blackMoves + whiteMoves);
+    }
+
+    public float heuristic() {
+        return parityHeuristic() + cornerHeuristic() + mobilityHeuristic();
+    }
+
     /**
      * Deallocates the board array while retaining other information about the state
      */
-    public void emptyBoard() {
+    public void setBoardEmpty() {
         board = null;
     }
 
@@ -90,17 +134,14 @@ public final class ReversiBoard
      * @param color to find pieces for
      * @return list containing positions of the pieces
      */
-    public List<ReversiPiece> findPieces(int color) {
-        List<ReversiPiece> pieces = new ArrayList<>();
-        int maxPieces = color == WHITE ? numWhitePieces : numBlackPieces;
+    public List<Tile> findPieces(byte color) {
+        List<Tile> pieces = new ArrayList<>();
 
         // iterate through each square and find the pieces
         for (int i = 0; i < getBoardSize(); i++) {
             for (int j = 0; j < getBoardSize(); j++) {
-                if (pieces.size() >= maxPieces)
-                    break;
                 if (board[i][j] == color)
-                    pieces.add(new ReversiPiece(i, j));
+                    pieces.add(new Tile(i, j));
             }
         }
         return pieces;
@@ -110,14 +151,22 @@ public final class ReversiBoard
      * Find the available moves the reversi board depending on the board state
      * @return a list containing the moves
      */
-    public List<ReversiPiece> findPotentialMoves() {
-        List<ReversiPiece> moves = new ArrayList<>();
+    public List<Tile> findPotentialMoves() {
+        return findPotentialMoves(blackMove ? BLACK : WHITE);
+    }
 
-        List<ReversiPiece> pieces = blackMove ? findPieces(BLACK) : findPieces(WHITE);
-        int oppositeColor = blackMove ? WHITE : BLACK;
+    /**
+     * Find the available moves the reversi board depending on the board state
+     * @return a list containing the moves
+     */
+    private List<Tile> findPotentialMoves(byte color) {
+        List<Tile> moves = new ArrayList<>();
+
+        List<Tile> pieces = findPieces(color);
+        int oppositeColor = color == BLACK ? WHITE : BLACK;
 
         // check each placed piece for potential flanks
-        for (ReversiPiece piece : pieces) {
+        for (Tile piece : pieces) {
             // check each direction from placed piece for potential flank
             for (int[] direction : BOARD_DIRECTIONS) {
                 int row = piece.getRow() + direction[0];
@@ -134,29 +183,67 @@ public final class ReversiBoard
                 }
                 // add move to potential moves list
                 if (count > 0 && inBounds(row, col)) {
-                    moves.add(new ReversiPiece(row, col));
+                    moves.add(new Tile(row, col));
                 }
             }
         }
+
         return moves;
+    }
+
+    /**
+     * Find the available moves the reversi board depending on the board state
+     * @return a list containing the moves
+     */
+    private int countPotentialMoves(byte color) {
+        int moves = 0;
+
+        List<Tile> pieces = findPieces(color);
+        int oppositeColor = color == BLACK ? WHITE : BLACK;
+
+        // check each placed piece for potential flanks
+        for (Tile piece : pieces) {
+            // check each direction from placed piece for potential flank
+            for (int[] direction : BOARD_DIRECTIONS) {
+                int row = piece.getRow() + direction[0];
+                int col = piece.getCol() + direction[1];
+
+                // iterate from placed piece to next opposite color
+                int count = 0;
+                while (inBounds(row, col)) {
+                    if (board[row][col] != oppositeColor)
+                        break;
+                    row += direction[0];
+                    col += direction[1];
+                    count++;
+                }
+                // increase count of potential moves
+                if (count > 0 && inBounds(row, col)) {
+                    moves++;
+                }
+            }
+        }
+
+        return moves;
+    }
+
+    public boolean isGameOver() {
+        return countPotentialMoves(blackMove ? BLACK : WHITE) <= 0;
     }
 
     /**
      * Makes a move on a position on the reversi board
      * @param move to make move
      */
-    public void makeMove(ReversiPiece move) {
+    public void makeMove(Tile move) {
         byte oppositeColor;
         byte currentColor;
-        int incBlack;
         if (blackMove) {
             oppositeColor = WHITE;
             currentColor = BLACK;
-            incBlack = 1;
         } else {
             oppositeColor = BLACK;
             currentColor = WHITE;
-            incBlack = -1;
         }
 
         blackMove = !blackMove;
@@ -197,8 +284,6 @@ public final class ReversiBoard
                     break;
 
                 board[row][col] = currentColor;
-                numBlackPieces += incBlack;
-                numWhitePieces += -incBlack;
 
                 row += direction[0];
                 col += direction[1];
@@ -215,6 +300,54 @@ public final class ReversiBoard
         int col = square.charAt(0) - 'a';
         int row = Character.getNumericValue(square.charAt(1)) - 1;
         board[row][col] = color;
+    }
+
+    /**
+     * Sets a square to a value on the board by reversi board notation
+     * @param position on the board
+     * @param color to set, must be one of the constants
+     */
+    public void setSquare(int position, byte color) {
+        int col = position / getBoardSize();
+        int row = position % getBoardSize();
+        board[row][col] = color;
+    }
+
+    /**
+     * Gets a square from the reversi board
+     * @param square in reversi board notation
+     */
+    public byte getSquare(String square) {
+        int col = square.charAt(0) - 'a';
+        int row = Character.getNumericValue(square.charAt(1)) - 1;
+        return board[row][col];
+    }
+
+    /**
+     * Gets a square from the reversi board
+     * @param position on the board
+     */
+    public byte getSquare(int position) {
+        int col = position / getBoardSize();
+        int row = position % getBoardSize();
+        return board[row][col];
+    }
+
+    /**
+     * Gets a square from the reversi board
+     * @param piece position on the board
+     */
+    public byte getSquare(Tile piece) {
+        return board[piece.getRow()][piece.getCol()];
+    }
+
+    /**
+     * Gets a square from the reversi board
+     * @param row to get for
+     * @param col to get for
+     */
+    public byte getSquare(int row, int col) {
+        return board[row][col];
     }
 
     /**
