@@ -26,7 +26,11 @@ The bot should be ready to respond to commands!
 
 <img src="https://user-images.githubusercontent.com/58538077/181812563-b16611c9-29dd-40ef-ad24-1da16ce6c7a6.png" width="35%" height="35%">
 
+<img src="https://user-images.githubusercontent.com/58538077/181820016-f7f330ee-481b-4eb7-ab93-9047336fef0d.png" width="35%" height="35%">
+
 <img src="https://user-images.githubusercontent.com/58538077/181819192-c6bbda8d-45a8-4662-bf68-6d259ec552c9.png" width="35%" height="35%">
+
+<img src="https://user-images.githubusercontent.com/58538077/181820414-d42266fc-a8be-4858-8825-ad91396f7a1c.png" width="50%" height="50%">
 
 <img src="https://user-images.githubusercontent.com/58538077/181812823-3b57c144-8b5b-4fa1-95e7-594032092780.png" width="50%" height="50%">
 
