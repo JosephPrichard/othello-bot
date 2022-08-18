@@ -1,26 +1,40 @@
 # OthelloBot
 
 OthelloBot is a Discord Bot used to play othello in discord text channels against other players or a bot. It includes graphical interface to see the othello board and a database with statistics for each player.
+OthelloBot is a self-hosted bot, so you will need to purchase your own hardware. A linux server from any cloud provider will do.
 
-## Start the Bot
+## Ai Algorithm
 
-Requires PostgreSQL and Java installed.
+### Minimax 
 
-Create a [bot](https://discord.com/developers/applications) on discord. You should be given a token when bot creation is complete.
+The AI uses a standard implementation of the Minimax algorithm with an Alpha-Beta pruning optimization. The Minimax algorithm is the backbone of the AI responsible for performing the search and deciding which nodes should be pruned.
 
-Make sure the bot has permissions to read and write messages.
+### Heuristics
 
-Create a Postgres database called "pandaothello" (schema will be generated when you run the app).
+The AI's heuristic evaluation function is responisble for deciding how good a board state is. The primary heuristic function is implemented as a combination of the 5 following specified heuristic functions
 
-cd to the root of this cloned repo.
+- Parity Heuristic (Measures the number of caputured discs. Useful for closing out games. The weightage increases gradually as the game goes on.)
 
-run `mvn package` to build the project.
+- Corner Heuristic (Meaures the number of captured corners. Highly weighted at all stages of the game.)
 
-cd to the built jar file in `/target`.
+- XCSquare Heuristic (Measures the number of captured X squares and C squares. Lowly weighted at all stages of the game.)
 
-run `java -cp JarName.jar Main <your_discord_token>`.
+- Mobility Heuristic (Measures the number of avaliable moves. The weightage decreases gradually as the game goes on.)
 
-The bot should be ready to respond to commands!
+- Stability Heuristic (Measures the number of moves that cannot be flipped. Highly weighted at all stages of the game.)
+
+All heuristic components are normalized to a weight between 100 and 0, with 100 being the highest weight and 0 being the lowest.
+
+### Bit Board
+
+The Othello Board implementation uses 2 longs (8 bytes) (128 bits) to store the bit board. "White is represented by 10, "Black" is represented by 01, and "Empty" (no disc) is represented by 00. Since each tile needs 2 bits to represent and there are a total of 64 tiles, we can represent the board using 64 * 2 = 128 bits. 
+
+This optimization provides both significant memory and time performance increases.
+
+### Transposition Table
+
+The AI keeps track of previously evaluated boards with a transposition table. The transposition table is implemented using a cache with a Deep2 replacement scheme.
+Each cache line has 2 buckets, one which is only replaced if the new board is found at a greater depth, the other is replaced if the first bucket is not.
 
 ## Commands
 
