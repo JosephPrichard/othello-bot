@@ -1,7 +1,6 @@
 # OthelloBot
 
-OthelloBot is a Discord Bot used to play othello in discord text channels against other players or a bot. It includes graphical interface to see the othello board and a database with statistics for each player.
-OthelloBot is a self-hosted bot, so you will need to purchase your own hardware. A linux server from any cloud provider will do.
+OthelloBot is a self-hosted Discord Bot used to play othello in discord text channels against other players or a bot. It includes graphical interface to see the othello board and a database with statistics for each player.
 
 ## Ai Algorithm
 
@@ -56,7 +55,7 @@ Forfets the game currently being played.
 
 `!move move`
 
-Make a move on the specific file. Move format is column-row.
+Make a move on the current game. Move format is column-row.
 
 `!view`
 
@@ -78,5 +77,5 @@ Shows the top users with the highest elo in the entire database.
 ## Images
 
 <img src="https://user-images.githubusercontent.com/58538077/181820016-f7f330ee-481b-4eb7-ab93-9047336fef0d.png" width="35%" height="35%">
+<img src="https://user-images.githubusercontent.com/58538077/216801119-b08ff083-74d8-49d7-96bf-40e904348004.png" width="35%" height="35%">
 
-<img src="https://user-images.githubusercontent.com/58538077/181821354-1f19f262-2679-4969-8204-75d8f251a847.png" width="35%" height="35%">
