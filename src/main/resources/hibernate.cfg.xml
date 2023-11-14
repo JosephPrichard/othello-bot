@@ -37,7 +37,7 @@
         <property name="hikari.idleTimeout">30000</property>
 
         <!-- ORM mappings -->
-        <mapping class="modules.stats.StatsEntity"/>
+        <mapping class="services.stats.StatsEntity"/>
 
     </session-factory>
 </hibernate-configuration>

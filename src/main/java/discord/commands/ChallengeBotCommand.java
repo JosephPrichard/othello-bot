@@ -1,13 +1,13 @@
 package discord.commands;
 
-import discord.message.senders.GameStartMessageSender;
+import discord.message.senders.GameStartSender;
 import discord.commands.abstracts.Command;
 import discord.commands.abstracts.CommandContext;
-import modules.game.Game;
-import modules.player.Player;
+import services.game.Game;
+import services.player.Player;
 import discord.renderers.OthelloBoardRenderer;
-import modules.game.GameService;
-import modules.game.exceptions.AlreadyPlayingException;
+import services.game.GameService;
+import services.game.exceptions.AlreadyPlayingException;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utils.NumberUtils;
@@ -55,7 +55,7 @@ public class ChallengeBotCommand extends Command
             Game game = gameService.createBotGame(player, level);
             BufferedImage image = boardRenderer.drawBoard(game.getBoard());
 
-            new GameStartMessageSender()
+            new GameStartSender()
                 .setGame(game)
                 .setImage(image)
                 .sendMessage(channel);

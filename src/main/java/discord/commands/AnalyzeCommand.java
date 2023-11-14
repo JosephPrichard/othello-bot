@@ -2,12 +2,12 @@ package discord.commands;
 
 import discord.commands.abstracts.CommandContext;
 import discord.commands.abstracts.Command;
-import modules.agent.AgentRequest;
-import modules.game.Game;
-import modules.player.Player;
-import discord.message.builder.AnalyzeEmbedBuilder;
-import modules.game.GameService;
-import modules.agent.AgentService;
+import services.agent.AgentRequest;
+import services.game.Game;
+import services.player.Player;
+import discord.message.builder.AnalyzeBuilder;
+import services.game.GameService;
+import services.agent.AgentService;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -68,7 +68,7 @@ public class AnalyzeCommand extends Command
 
             agentService.findRankedMoves(
                 new AgentRequest<>(game, d, (List<Move> rankedMoves) -> {
-                    MessageEmbed embed = new AnalyzeEmbedBuilder()
+                    MessageEmbed embed = new AnalyzeBuilder()
                         .setRankedMoves(rankedMoves)
                         .build();
 

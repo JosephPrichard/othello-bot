@@ -3,10 +3,10 @@ package discord.commands;
 import discord.JDASingleton;
 import discord.commands.abstracts.CommandContext;
 import discord.commands.abstracts.Command;
-import modules.challenge.Challenge;
-import modules.challenge.ChallengeService;
-import modules.player.Player;
-import discord.message.builder.ChallengeMessageBuilder;
+import services.challenge.Challenge;
+import services.challenge.ChallengeService;
+import services.player.Player;
+import discord.message.builder.ChallengeBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -41,7 +41,7 @@ public class ChallengeCommand extends Command
         Runnable onExpiry = () -> channel.sendMessage("<@" + id + "> Challenge timed out!").queue();
         challengeService.createChallenge(new Challenge(opponent, player), onExpiry);
 
-        String message = new ChallengeMessageBuilder()
+        String message = new ChallengeBuilder()
             .setChallenged(opponent)
             .setChallenger(player)
             .build();
