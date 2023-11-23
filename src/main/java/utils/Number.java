@@ -1,6 +1,10 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package utils;
 
-public class NumberUtils
+public class Number
 {
     public static Integer parseIntOrNull(String str) {
         try {

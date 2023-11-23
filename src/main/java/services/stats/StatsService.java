@@ -1,23 +1,24 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package services.stats;
 
 import services.game.GameResult;
 import services.player.Player;
-import utils.EloUtils;
+import utils.Elo;
 
 import java.util.List;
 import java.util.concurrent.*;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class StatsService
 {
+    private final Logger logger = Logger.getLogger("service.stats");
     private final ExecutorService es = Executors.newFixedThreadPool(8);
     private final StatsDao statsDao;
     private final StatsMapper mapper = new StatsMapper();
-    private final Logger logger = Logger.getLogger("service.stats");
 
     public StatsService(StatsDao statsDao) {
         this.statsDao = statsDao;
@@ -58,10 +59,10 @@ public class StatsService
         // perform elo calculations
         float winnerEloBefore = winnerStats.getElo();
         float loserEloBefore = loserStats.getElo();
-        float probWin = EloUtils.probability(loserStats.getElo(), winnerStats.getElo());
-        float probLost = EloUtils.probability(winnerStats.getElo(), loserStats.getElo());
-        float winnerEloAfter = EloUtils.ratingWon(winnerStats.getElo(), probWin);
-        float loserEloAfter = EloUtils.ratingLost(loserStats.getElo(), probLost);
+        float probWin = Elo.probability(loserStats.getElo(), winnerStats.getElo());
+        float probLost = Elo.probability(winnerStats.getElo(), loserStats.getElo());
+        float winnerEloAfter = Elo.ratingWon(winnerStats.getElo(), probWin);
+        float loserEloAfter = Elo.ratingLost(loserStats.getElo(), probLost);
 
         // set new values in entities
         winnerStats.setElo(winnerEloAfter);

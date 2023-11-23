@@ -1,8 +1,12 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package utils;
 
 import services.player.Player;
 
-public class BotUtils
+public class Bot
 {
     public static final int MAX_BOT_LEVEL = 15;
     public static final int MIN_DEPTH = 0;
@@ -20,7 +24,7 @@ public class BotUtils
         return "OthelloBot level " + id;
     }
 
-    public static Player Bot(long level) {
+    public static Player create(long level) {
         return new Player(level, getBotName(level));
     }
 

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package discord.message.builder;
 
 import services.stats.Stats;
@@ -7,7 +11,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import java.awt.*;
 import java.util.List;
 
-import static utils.StringUtils.*;
+import static utils.Strings.*;
 
 public class LeaderboardBuilder
 {

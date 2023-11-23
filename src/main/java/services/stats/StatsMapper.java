@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package services.stats;
 
 import discord.JDASingleton;
@@ -5,7 +9,7 @@ import services.player.Player;
 import net.dv8tion.jda.api.entities.User;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import utils.BotUtils;
+import utils.Bot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +41,7 @@ public class StatsMapper
         // fetch each tag from jda using futures, for the bots return null and map bot name instead
         List<CompletableFuture<User>> futures = new ArrayList<>();
         for (StatsEntity entity : entityList) {
-            if (!BotUtils.isBotId(entity.getPlayerId())) {
+            if (!Bot.isBotId(entity.getPlayerId())) {
                 futures.add(JDASingleton.fetchUser(entity.getPlayerId()).submit());
             } else {
                 futures.add(CompletableFuture.completedFuture(null));
@@ -49,7 +53,7 @@ public class StatsMapper
         for(int i = 0; i < futures.size(); i++){
             // retrieve tag from completed future
             User user = futures.get(i).join();
-            String tag = user != null ? user.getAsTag() : BotUtils.getBotName(entityList.get(i).getPlayerId());
+            String tag = user != null ? user.getAsTag() : Bot.getBotName(entityList.get(i).getPlayerId());
             // map entity to dto and add to dto list
             Stats stats = modelMapper.map(entityList.get(i), Stats.class);
             stats.getPlayer().setName(tag);

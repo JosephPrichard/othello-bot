@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package discord.message.builder;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -7,7 +11,7 @@ import othello.ai.Move;
 import java.awt.*;
 import java.util.List;
 
-import static utils.StringUtils.*;
+import static utils.Strings.*;
 
 public class AnalyzeBuilder
 {

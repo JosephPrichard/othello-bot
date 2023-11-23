@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package discord.message.builder;
 
 import services.player.Player;

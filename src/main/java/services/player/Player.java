@@ -1,8 +1,12 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package services.player;
 
 import net.dv8tion.jda.api.entities.User;
-import utils.DiscordUtils;
-import utils.BotUtils;
+import utils.Discord;
+import utils.Bot;
 
 public class Player
 {
@@ -21,12 +25,12 @@ public class Player
     }
 
     public Player(User user) {
-        this.id = DiscordUtils.toLongId(user.getId());
+        this.id = Discord.toLongId(user.getId());
         this.name = user.getAsTag();
     }
 
     public boolean isBot() {
-        return BotUtils.isBotId(id);
+        return Bot.isBotId(id);
     }
 
     public long getId() {

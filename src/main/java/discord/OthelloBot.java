@@ -1,8 +1,13 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package discord;
 
 import discord.commands.*;
 import discord.commands.abstracts.Command;
 import services.DataSource;
+import services.game.GameResult;
 import services.stats.StatsDao;
 import services.challenge.ChallengeService;
 import services.game.GameService;
@@ -30,8 +35,8 @@ public class OthelloBot extends ListenerAdapter
         StatsDao statsDao = new StatsDao(ds);
 
         AgentService agentService = new AgentService();
-        GameService gameService = new GameService();
         StatsService statsService = new StatsService(statsDao);
+        GameService gameService = new GameService(statsService);
         ChallengeService challengeService = new ChallengeService();
 
         OthelloBoardRenderer boardRenderer = new OthelloBoardRenderer();

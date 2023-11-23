@@ -1,6 +1,10 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package utils;
 
-public class ArrayUtils
+public class Array
 {
     public static byte[][] deepCopyOf2DArray(byte[][] array) {
         byte[][] arrayCopy = new byte[array.length][];

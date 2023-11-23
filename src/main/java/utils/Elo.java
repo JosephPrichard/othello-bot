@@ -1,6 +1,10 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package utils;
 
-public class EloUtils
+public class Elo
 {
     public static final int K = 30;
 

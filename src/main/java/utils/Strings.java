@@ -1,6 +1,10 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package utils;
 
-public class StringUtils
+public class Strings
 {
     public static String column(String str, int size, String tail) {
         StringBuilder builder = new StringBuilder();

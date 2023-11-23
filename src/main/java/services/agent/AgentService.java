@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package services.agent;
 
 import othello.ai.Move;
@@ -18,7 +22,7 @@ public class AgentService
             List<Move> moves = agent.findRankedMoves();
             agentRequest.getOnComplete().accept(moves);
         });
-        logger.info("Started ai ranked moves calculation of depth " + agentRequest.getDepth());
+        logger.info("Started agent ranked moves calculation of depth " + agentRequest.getDepth());
     }
 
     public void findBestMove(AgentRequest<Move> agentRequest) {
@@ -27,6 +31,6 @@ public class AgentService
             Move move = agent.findBestMove();
             agentRequest.getOnComplete().accept(move);
         });
-        logger.info("Started ai best move calculation of depth " + agentRequest.getDepth());
+        logger.info("Started agent best move calculation of depth " + agentRequest.getDepth());
     }
 }

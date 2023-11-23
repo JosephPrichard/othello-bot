@@ -1,8 +1,13 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package utils;
 
-public class DiscordUtils
+public class Discord
 {
     public static long toLongId(String id) {
+        // removes all non digit characters
         String strippedId = id.replaceAll("[\\D]", "");
         return Long.parseLong(strippedId);
     }

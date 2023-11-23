@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package utils;
 
 import javax.imageio.ImageIO;
@@ -5,11 +9,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
-public class ImageUtils
+public class Image
 {
     public static BufferedImage readImage(String path) {
         try {
-            ClassLoader classLoader = ImageUtils.class.getClassLoader();
+            ClassLoader classLoader = Image.class.getClassLoader();
             InputStream is = classLoader.getResourceAsStream(path);
             if (is != null) {
                 return ImageIO.read(is);

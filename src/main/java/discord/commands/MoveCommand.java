@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Joseph Prichard 2023.
+ */
+
 package discord.commands;
 
 import discord.commands.abstracts.CommandContext;
@@ -19,7 +23,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import othello.ai.Move;
 import othello.board.Tile;
-import utils.BotUtils;
+import utils.Bot;
 
 import java.awt.image.BufferedImage;
 import java.util.logging.Logger;
@@ -99,13 +103,13 @@ public class MoveCommand extends Command
                 } else {
                     // not game over against bot
                     sendGameMessage(channel, game);
-                    // queue an ai request which will find the best move, make the move, and send back a response
-                    int depth = BotUtils.getDepthFromId(game.getCurrentPlayer().getId());
+                    // queue an agent request which will find the best move, make the move, and send back a response
+                    int depth = Bot.getDepthFromId(game.getCurrentPlayer().getId());
                     agentService.findBestMove(
                         new AgentRequest<>(game, depth, (Move bestMove) -> {
-                            // make the ai's best move on the game state, and update in storage
+                            // make the agent's best move on the game state, and update in storage
                             gameService.makeMove(game, bestMove.getTile());
-                            // check if game is over after ai makes move
+                            // check if game is over after agent makes move
                             if (!game.isGameOver()) {
                                 sendGameMessage(channel, game, bestMove.getTile());
                             } else {
