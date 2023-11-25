@@ -20,6 +20,8 @@ import utils.Number;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static utils.Bot.MAX_BOT_LEVEL;
+
 public class AnalyzeCommand extends Command
 {
     private final Logger logger = Logger.getLogger("command.analyze");
@@ -27,7 +29,7 @@ public class AnalyzeCommand extends Command
     private final AgentService agentService;
 
     public AnalyzeCommand(GameService gameService, AgentService agentService) {
-        super("analyze", "Runs an analysis of the board until a given depth between 5 and 15", 0, "depth");
+        super("analyze", "Runs an analysis of the board until a given level between 1 and " + MAX_BOT_LEVEL, 0, "level");
         this.gameService = gameService;
         this.agentService = agentService;
     }
@@ -38,19 +40,19 @@ public class AnalyzeCommand extends Command
         MessageChannel channel = event.getChannel();
 
         // retrieve depth parameter and perform type validation
-        Integer depth = 5;
-        String depthStr = ctx.getParam("depth");
-        if (depthStr != null) {
-            depth = Number.parseIntOrNull(depthStr);
-            if (depth == null) {
-                channel.sendMessage("Depth must be a number.").queue();
+        Integer level = 3;
+        String levelStr = ctx.getParam("level");
+        if (levelStr != null) {
+            level = Number.parseIntOrNull(levelStr);
+            if (level == null) {
+                channel.sendMessage("Level must be a number.").queue();
                 return;
             }
         }
 
         // check if depth is within range
-        if (!Bot.isValidLevel(depth)) {
-            channel.sendMessage("Invalid depth. Type !help analyze for valid depths.").queue();
+        if (!Bot.isValidLevel(level)) {
+            channel.sendMessage("Invalid level. Type !help analyze for valid levels.").queue();
             return;
         }
 
@@ -63,23 +65,22 @@ public class AnalyzeCommand extends Command
             return;
         }
 
-        // send starting message, then add queue an ai request, send back the results in a message when its done
-        int d = depth;
+        // send starting message, then add queue an ai request, send back the results in a message when it's done
+        int depth = Bot.getDepthFromId(level);
         channel.sendMessage("Analyzing... Wait a second...").queue(m -> {
             logger.info("Starting board state analysis");
 
-            agentService.findRankedMoves(
-                new AgentRequest<>(game, d, (List<Move> rankedMoves) -> {
-                    MessageEmbed embed = new AnalyzeBuilder()
-                        .setRankedMoves(rankedMoves)
-                        .build();
+            AgentRequest<List<Move>> r = new AgentRequest<>(game, depth, (List<Move> rankedMoves) -> {
+                MessageEmbed embed = new AnalyzeBuilder()
+                    .setRankedMoves(rankedMoves)
+                    .build();
 
-                    m.editMessage("<@" + player + "> ").queue();
-                    m.editMessageEmbeds(embed).queue();
+                m.editMessage("<@" + player + "> ").queue();
+                m.editMessageEmbeds(embed).queue();
 
-                    logger.info("Finished board state analysis");
-                })
-            );
+                logger.info("Finished board state analysis");
+            });
+            agentService.findRankedMoves(r);
         });
     }
 }

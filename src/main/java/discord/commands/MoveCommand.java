@@ -81,6 +81,22 @@ public class MoveCommand extends Command
             .sendMessage(channel);
     }
 
+    private void sendAgentRequest(MessageChannel channel, Game game) {
+        // queue an agent request which will find the best move, make the move, and send back a response
+        int depth = Bot.getDepthFromId(game.getCurrentPlayer().getId());
+        AgentRequest<Move> r = new AgentRequest<>(game, depth, (Move bestMove) -> {
+            // make the agent's best move on the game state, and update in storage
+            gameService.makeMove(game, bestMove.getTile());
+            // check if game is over after agent makes move
+            if (!game.isGameOver()) {
+                sendGameMessage(channel, game, bestMove.getTile());
+            } else {
+                sendGameOverMessage(channel, game, bestMove.getTile());
+            }
+        });
+        agentService.findBestMove(r);
+    }
+
     @Override
     public void doCommand(CommandContext ctx) {
         MessageReceivedEvent event = ctx.getEvent();
@@ -101,20 +117,7 @@ public class MoveCommand extends Command
                 } else {
                     // not game over against bot
                     sendGameMessage(channel, game);
-                    // queue an agent request which will find the best move, make the move, and send back a response
-                    int depth = Bot.getDepthFromId(game.getCurrentPlayer().getId());
-                    agentService.findBestMove(
-                        new AgentRequest<>(game, depth, (Move bestMove) -> {
-                            // make the agent's best move on the game state, and update in storage
-                            gameService.makeMove(game, bestMove.getTile());
-                            // check if game is over after agent makes move
-                            if (!game.isGameOver()) {
-                                sendGameMessage(channel, game, bestMove.getTile());
-                            } else {
-                                sendGameOverMessage(channel, game, bestMove.getTile());
-                            }
-                        })
-                    );
+                    sendAgentRequest(channel, game);
                 }
             } else {
                 // game over against bot or not

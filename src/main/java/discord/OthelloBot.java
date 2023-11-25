@@ -19,6 +19,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,20 +42,25 @@ public class OthelloBot extends ListenerAdapter
         OthelloBoardRenderer boardRenderer = new OthelloBoardRenderer();
 
         // add all bot commands to the handler map for handling events
-        addCommand(new ChallengeCommand(challengeService));
-        addCommand(new ChallengeBotCommand(gameService, boardRenderer));
-        addCommand(new AcceptCommand(gameService, challengeService, boardRenderer));
-        addCommand(new ForfeitCommand(gameService, statsService, boardRenderer));
-        addCommand(new MoveCommand(gameService, statsService, agentService, boardRenderer));
-        addCommand(new ViewCommand(gameService, boardRenderer));
-        addCommand(new AnalyzeCommand(gameService, agentService));
-        addCommand(new StatsCommand(statsService));
-        addCommand(new LeaderBoardCommand(statsService));
+        addCommands(
+            new ChallengeCommand(challengeService),
+            new ChallengeCommand(challengeService),
+            new ChallengeBotCommand(gameService, boardRenderer),
+            new AcceptCommand(gameService, challengeService, boardRenderer),
+            new ForfeitCommand(gameService, statsService, boardRenderer),
+            new MoveCommand(gameService, statsService, agentService, boardRenderer),
+            new ViewCommand(gameService, boardRenderer),
+            new AnalyzeCommand(gameService, agentService),
+            new StatsCommand(statsService),
+            new LeaderBoardCommand(statsService)
+        );
     }
 
-    public void addCommand(Command command) {
-        commandMap.put("!" + command.getKey(), command);
-        commandList.add(command);
+    public void addCommands(Command... commands) {
+        for (Command c : commands) {
+            commandMap.put("!" + c.getKey(), c);
+            commandList.add(c);
+        }
     }
 
     public void onHelpForCommand(MessageChannel channel, String key) {

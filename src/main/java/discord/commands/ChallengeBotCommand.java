@@ -18,6 +18,8 @@ import utils.Bot;
 import java.awt.image.BufferedImage;
 import java.util.logging.Logger;
 
+import static utils.Bot.MAX_BOT_LEVEL;
+
 public class ChallengeBotCommand extends Command
 {
     private final Logger logger = Logger.getLogger("command.challenge");
@@ -25,7 +27,8 @@ public class ChallengeBotCommand extends Command
     private final OthelloBoardRenderer boardRenderer;
 
     public ChallengeBotCommand(GameService gameService, OthelloBoardRenderer boardRenderer) {
-        super("challengebot", "Challenges PandaOthello Bot between levels 1 and 5 to an Othello game.", 0, "level");
+        super("challengebot", "Challenges PandaOthello Bot between levels 1 and " +
+            MAX_BOT_LEVEL + " to an Othello game.", 0, "level");
         this.gameService = gameService;
         this.boardRenderer = boardRenderer;
     }
@@ -36,7 +39,7 @@ public class ChallengeBotCommand extends Command
         MessageChannel channel = event.getChannel();
 
         // retrieve depth parameter and perform type validation
-        Integer level = 5;
+        Integer level = 3;
         String levelStr = ctx.getParam("level");
         if (levelStr != null) {
             level = Number.parseIntOrNull(levelStr);
