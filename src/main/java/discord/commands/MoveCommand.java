@@ -49,7 +49,7 @@ public class MoveCommand extends Command
 
     public void sendGameMessage(MessageChannel channel, Game game, Tile move) {
         // render board and send back message
-        BufferedImage image = boardRenderer.drawBoardMoves(game.getBoard());
+        var image = boardRenderer.drawBoardMoves(game.getBoard());
         new GameViewSender()
             .setGame(game, move)
             .setTag(game)
@@ -59,7 +59,7 @@ public class MoveCommand extends Command
 
     public void sendGameMessage(MessageChannel channel, Game game) {
         // render board and send back message
-        BufferedImage image = boardRenderer.drawBoardMoves(game.getBoard());
+        var image = boardRenderer.drawBoardMoves(game.getBoard());
         new GameViewSender()
             .setGame(game)
             .setImage(image)
@@ -68,10 +68,10 @@ public class MoveCommand extends Command
 
     public void sendGameOverMessage(MessageChannel channel, Game game, Tile move) {
         // update elo the elo of the players
-        GameResult result = game.getResult();
+        var result = game.getResult();
         statsService.updateStats(result);
         // render board and send back message
-        BufferedImage image = boardRenderer.drawBoard(game.getBoard());
+        var image = boardRenderer.drawBoard(game.getBoard());
         new GameOverSender()
             .setGame(result)
             .addMoveMessage(result.getWinner(), move.toString())
@@ -83,8 +83,8 @@ public class MoveCommand extends Command
 
     private void sendAgentRequest(MessageChannel channel, Game game) {
         // queue an agent request which will find the best move, make the move, and send back a response
-        int depth = Bot.getDepthFromId(game.getCurrentPlayer().getId());
-        AgentRequest<Move> r = new AgentRequest<>(game, depth, (Move bestMove) -> {
+        var depth = Bot.getDepthFromId(game.getCurrentPlayer().getId());
+        var r = new AgentRequest<Move>(game, depth, (Move bestMove) -> {
             // make the agent's best move on the game state, and update in storage
             gameService.makeMove(game, bestMove.getTile());
             // check if game is over after agent makes move
@@ -99,16 +99,16 @@ public class MoveCommand extends Command
 
     @Override
     public void doCommand(CommandContext ctx) {
-        MessageReceivedEvent event = ctx.getEvent();
-        MessageChannel channel = event.getChannel();
+        var event = ctx.getEvent();
+        var channel = event.getChannel();
 
-        String strMove = ctx.getParam("move");
-        Player player = new Player(event.getAuthor());
+        var strMove = ctx.getParam("move");
+        var player = new Player(event.getAuthor());
 
-        Tile move = new Tile(strMove);
+        var move = new Tile(strMove);
         try {
             // make player's move, then respond accordingly depending on the new game state
-            Game game = gameService.makeMove(player, move);
+            var game = gameService.makeMove(player, move);
 
             if (!game.isGameOver()) {
                 if (!game.isAgainstBot()) {

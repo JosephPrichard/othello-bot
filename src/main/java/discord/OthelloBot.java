@@ -30,20 +30,19 @@ public class OthelloBot extends ListenerAdapter
     private final List<Command> commandList = new ArrayList<>();
 
     public OthelloBot() {
-        DataSource ds = new DataSource();
+        var ds = new DataSource();
 
-        StatsDao statsDao = new StatsDao(ds);
+        var statsDao = new StatsDao(ds);
 
-        AgentService agentService = new AgentService();
-        StatsService statsService = new StatsService(statsDao);
-        GameService gameService = new GameService(statsService);
-        ChallengeService challengeService = new ChallengeService();
+        var agentService = new AgentService();
+        var statsService = new StatsService(statsDao);
+        var gameService = new GameService(statsService);
+        var challengeService = new ChallengeService();
 
-        OthelloBoardRenderer boardRenderer = new OthelloBoardRenderer();
+        var boardRenderer = new OthelloBoardRenderer();
 
         // add all bot commands to the handler map for handling events
         addCommands(
-            new ChallengeCommand(challengeService),
             new ChallengeCommand(challengeService),
             new ChallengeBotCommand(gameService, boardRenderer),
             new AcceptCommand(gameService, challengeService, boardRenderer),
@@ -57,7 +56,7 @@ public class OthelloBot extends ListenerAdapter
     }
 
     public void addCommands(Command... commands) {
-        for (Command c : commands) {
+        for (var c : commands) {
             commandMap.put("!" + c.getKey(), c);
             commandList.add(c);
         }
@@ -65,10 +64,10 @@ public class OthelloBot extends ListenerAdapter
 
     public void onHelpForCommand(MessageChannel channel, String key) {
         key = "!" + key;
-        Command command = commandMap.get(key);
+        var command = commandMap.get(key);
         if (command != null) {
-            StringBuilder text = new StringBuilder(command.getDesc() + "\n" + key);
-            for (String param : command.getParams()) {
+            var text = new StringBuilder(command.getDesc() + "\n" + key);
+            for (var param : command.getParams()) {
                 text.append(" `").append(param).append("`");
             }
             channel.sendMessage(text.toString()).queue();
@@ -78,9 +77,9 @@ public class OthelloBot extends ListenerAdapter
     }
 
     public void onHelp(MessageChannel channel) {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.append("Commands: ");
-        for (Command command : commandList) {
+        for (var command : commandList) {
             stringBuilder.append("`!")
                 .append(command.getKey())
                 .append("` ");
@@ -94,10 +93,10 @@ public class OthelloBot extends ListenerAdapter
             return;
         }
 
-        String message = event.getMessage().getContentRaw();
+        var message = event.getMessage().getContentRaw();
         // extracts the command key from the string
-        String[] tokens = message.split("\\s+");
-        String key = tokens[0];
+        var tokens = message.split("\\s+");
+        var key = tokens[0];
 
         // special case for help command
         if (key.equals("!help")) {
@@ -111,7 +110,7 @@ public class OthelloBot extends ListenerAdapter
         }
 
         // fetch command handler from bot.commands map, execute if command exists
-        Command command = commandMap.get(key);
+        var command = commandMap.get(key);
         if (command != null) {
             command.onMessageEvent(event);
         }

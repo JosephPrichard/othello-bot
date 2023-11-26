@@ -36,12 +36,12 @@ public class AnalyzeCommand extends Command
 
     @Override
     protected void doCommand(CommandContext ctx) {
-        MessageReceivedEvent event = ctx.getEvent();
-        MessageChannel channel = event.getChannel();
+        var event = ctx.getEvent();
+        var channel = event.getChannel();
 
         // retrieve depth parameter and perform type validation
         Integer level = 3;
-        String levelStr = ctx.getParam("level");
+        var levelStr = ctx.getParam("level");
         if (levelStr != null) {
             level = Number.parseIntOrNull(levelStr);
             if (level == null) {
@@ -56,22 +56,22 @@ public class AnalyzeCommand extends Command
             return;
         }
 
-        Player player = new Player(event.getAuthor());
+        var player = new Player(event.getAuthor());
 
         // fetch game to analyze
-        Game game = gameService.getGame(player);
+        var game = gameService.getGame(player);
         if (game == null) {
             channel.sendMessage("You're not currently in a game.").queue();
             return;
         }
 
         // send starting message, then add queue an ai request, send back the results in a message when it's done
-        int depth = Bot.getDepthFromId(level);
+        var depth = Bot.getDepthFromId(level);
         channel.sendMessage("Analyzing... Wait a second...").queue(m -> {
             logger.info("Starting board state analysis");
 
-            AgentRequest<List<Move>> r = new AgentRequest<>(game, depth, (List<Move> rankedMoves) -> {
-                MessageEmbed embed = new AnalyzeBuilder()
+            var r = new AgentRequest<List<Move>>(game, depth, (List<Move> rankedMoves) -> {
+                var embed = new AnalyzeBuilder()
                     .setRankedMoves(rankedMoves)
                     .build();
 

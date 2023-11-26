@@ -35,12 +35,12 @@ public class ChallengeBotCommand extends Command
 
     @Override
     public void doCommand(CommandContext ctx) {
-        MessageReceivedEvent event = ctx.getEvent();
-        MessageChannel channel = event.getChannel();
+        var event = ctx.getEvent();
+        var channel = event.getChannel();
 
         // retrieve depth parameter and perform type validation
         Integer level = 3;
-        String levelStr = ctx.getParam("level");
+        var levelStr = ctx.getParam("level");
         if (levelStr != null) {
             level = Number.parseIntOrNull(levelStr);
             if (level == null) {
@@ -54,11 +54,11 @@ public class ChallengeBotCommand extends Command
             return;
         }
 
-        Player player = new Player(event.getAuthor());
+        var player = new Player(event.getAuthor());
 
         try {
-            Game game = gameService.createBotGame(player, level);
-            BufferedImage image = boardRenderer.drawBoard(game.getBoard());
+            var game = gameService.createBotGame(player, level);
+            var image = boardRenderer.drawBoard(game.getBoard());
 
             new GameStartSender()
                 .setGame(game)
