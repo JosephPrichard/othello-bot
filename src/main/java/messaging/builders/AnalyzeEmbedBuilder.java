@@ -24,8 +24,8 @@ public class AnalyzeEmbedBuilder extends EmbedBuilder {
         var count = 1;
         for (var move : rankedMoves) {
             desc.append(rightPad(count + ")", 5))
-                .append(rightPad(move.getTile().toString(), 5))
-                .append(move.getHeuristic()).append(" ")
+                .append(rightPad(move.tile().toString(), 5))
+                .append(move.heuristic()).append(" ")
                 .append("\n");
             count++;
         }
