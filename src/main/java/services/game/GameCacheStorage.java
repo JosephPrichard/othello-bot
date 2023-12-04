@@ -86,14 +86,7 @@ public class GameCacheStorage implements GameStorage {
 
     @Nullable
     public Game getGame(Player player) {
-        var optionalGame = games.get(player.id());
-        if (optionalGame.isPresent()) {
-            var game = optionalGame.get();
-            // creates a new game with a copied board to ensure this class is thread safe
-            return new Game(game);
-        } else {
-            return null;
-        }
+        return games.get(player.id()).orElse(null);
     }
 
     public void saveGame(Game game) {

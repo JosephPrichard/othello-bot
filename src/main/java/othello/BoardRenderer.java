@@ -4,7 +4,7 @@
 
 package othello;
 
-import utils.Image;
+import utils.ImageUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -100,14 +100,14 @@ public class BoardRenderer {
         for (var i = 0; i < boardSize; i++) {
             var text = Character.toString(i + 'A');
             var rect = new Rectangle(SIDE_OFFSET + i * TILE_SIZE, 0, TILE_SIZE, SIDE_OFFSET);
-            Image.drawCenteredString(g, text, rect, font);
+            ImageUtils.drawCenteredString(g, text, rect, font);
         }
 
         // draw numbers on vertical sidebar
         for (var i = 0; i < boardSize; i++) {
             var text = Integer.toString(i + 1);
             var rect = new Rectangle(0, SIDE_OFFSET + i * TILE_SIZE, SIDE_OFFSET, TILE_SIZE);
-            Image.drawCenteredString(g, text, rect, font);
+            ImageUtils.drawCenteredString(g, text, rect, font);
         }
     }
 

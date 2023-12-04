@@ -10,8 +10,8 @@ import services.stats.Stats;
 import java.awt.*;
 import java.util.List;
 
-import static utils.Strings.leftPad;
-import static utils.Strings.rightPad;
+import static utils.StringUtils.leftPad;
+import static utils.StringUtils.rightPad;
 
 public class LeaderboardEmbedBuilder extends EmbedBuilder {
 

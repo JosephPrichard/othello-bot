@@ -8,6 +8,7 @@ import services.game.GameResult;
 import services.player.Player;
 import services.player.UserFetcher;
 import services.player.exceptions.UnknownUserException;
+import utils.StreamUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,19 +56,20 @@ public class StatsService implements StatsWriter, StatsReader {
         CompletableFuture.allOf((futures.toArray(new CompletableFuture[0]))).join();
 
         // map each entity to dto
-        List<Stats> statsList = new ArrayList<>();
-        for (var i = 0; i < futures.size(); i++) {
-            var statsEntity = statsEntityList.get(i);
+        return StreamUtils
+            .zip(statsEntityList, futures)
+            .map((pair) -> {
+                var statsEntity = pair.left();
+                var future = pair.right();
 
-            var tag = futures.get(i).join();
-            if (tag == null) {
-                tag = Player.Bot.name(statsEntity.getPlayerId());
-            }
+                var tag = future.join();
+                if (tag == null) {
+                    tag = Player.Bot.name(statsEntity.getPlayerId());
+                }
 
-            var stats = new Stats(statsEntityList.get(i), tag);
-            statsList.add(stats);
-        }
-        return statsList;
+                return new Stats(statsEntity, tag);
+            })
+            .toList();
     }
 
     public static float calcProbability(float rating1, float rating2) {

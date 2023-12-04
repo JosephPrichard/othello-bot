@@ -10,7 +10,7 @@ import othello.Move;
 import java.awt.*;
 import java.util.List;
 
-import static utils.Strings.rightPad;
+import static utils.StringUtils.rightPad;
 
 public class AnalyzeEmbedBuilder extends EmbedBuilder {
 

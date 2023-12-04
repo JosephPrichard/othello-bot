@@ -78,4 +78,15 @@ public class Stats {
         }
         return won / (float) (won + lost + drawn) * 100f;
     }
+
+    @Override
+    public String toString() {
+        return "Stats{" +
+            "player=" + player +
+            ", elo=" + elo +
+            ", won=" + won +
+            ", lost=" + lost +
+            ", drawn=" + drawn +
+            '}';
+    }
 }
