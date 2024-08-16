@@ -7,5 +7,4 @@ package services.challenge;
 import services.player.Player;
 
 public record Challenge(Player challenged, Player challenger) {
-
 }

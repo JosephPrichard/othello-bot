@@ -7,12 +7,10 @@ package services.agent;
 import othello.Move;
 import othello.OthelloAgent;
 import othello.OthelloBoard;
+import othello.Tile;
 
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 
 import static utils.LogUtils.LOGGER;
@@ -39,11 +37,11 @@ public class AgentDispatcher implements IAgentDispatcher {
         this.agentsQueue = agentsQueue;
     }
 
-    public void findMoves(OthelloBoard board, int depth, Consumer<List<Move>> onComplete) {
+    public Future<List<Move>> findMoves(OthelloBoard board, int depth) {
+        CompletableFuture<List<Move>> future = new CompletableFuture<>();
         cpuBndExecutor.submit(() -> {
             try {
                 var agent = agentsQueue.take();
-
                 LOGGER.info("Started agent ranked moves calculation of depth " + depth);
 
                 var moves = agent.findRankedMoves(board, depth);
@@ -51,14 +49,16 @@ public class AgentDispatcher implements IAgentDispatcher {
 
                 LOGGER.info("Finished agent ranked moves calculation of depth " + depth + ": "
                     + moves.stream().map(Move::toString).reduce("", String::concat));
-                onComplete.accept(moves);
+                future.complete(moves);
             } catch (Exception ex) {
                 LOGGER.warning("Error occurred while processing a find moves event " + ex);
             }
         });
+        return future;
     }
 
-    public void findMove(OthelloBoard board, int depth, Consumer<Move> onComplete) {
+    public Future<Move> findMove(OthelloBoard board, int depth) {
+        CompletableFuture<Move> future = new CompletableFuture<>();
         cpuBndExecutor.submit(() -> {
             try {
                 var agent = agentsQueue.take();
@@ -69,10 +69,11 @@ public class AgentDispatcher implements IAgentDispatcher {
                 agentsQueue.add(agent);
 
                 LOGGER.info("Finished agent best move calculation of depth " + depth + ": " + move);
-                onComplete.accept(move);
+                future.complete(move);
             } catch (Exception ex) {
                 LOGGER.warning("Error occurred while processing a find move event " + ex);
             }
         });
+        return future;
     }
 }

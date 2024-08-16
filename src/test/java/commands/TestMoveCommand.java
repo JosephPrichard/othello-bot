@@ -8,7 +8,6 @@ import commands.context.CommandContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
-import othello.Move;
 import othello.Tile;
 import services.agent.IAgentDispatcher;
 import services.game.Game;
@@ -21,7 +20,7 @@ import services.player.Player;
 import services.stats.StatsResult;
 import services.stats.IStatsService;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -74,13 +73,13 @@ public class TestMoveCommand {
         var spy_game = spy(Game.start(botPlayer, callingPlayer));
         when(spy_game.currentPlayer()).thenReturn(botPlayer);
 
-        Answer<Void> stubbedFindMove = invocation -> {
-            Consumer<Move> argument = invocation.getArgument(2);
+        Answer<CompletableFuture<Move>> stubbedFindMove = invocation -> {
             // mock the response from the agent to be anything - this test doesn't need to know what it is
-            argument.accept(new Move(Tile.fromNotation("a1"), 0));
-            return null;
+            CompletableFuture<Move> future = new CompletableFuture<>();
+            future.complete(new Move(Tile.fromNotation("a1"), 0));
+            return future;
         };
-        doAnswer(stubbedFindMove).when(mock_agentDispatcher).findMove(any(), anyInt(), any());
+        doAnswer(stubbedFindMove).when(mock_agentDispatcher).findMove(any(), anyInt());
 
         when(mock_gameService.makeMove(any(), any())).thenReturn(spy_game);
 
@@ -89,7 +88,7 @@ public class TestMoveCommand {
         verify(mock_gameService).makeMove(callingPlayer, Tile.fromNotation("c4"));
         verify(spy_moveCommand).buildMoveView(spy_game);
         verify(spy_moveCommand).doBotMove(mock_cmdCtx, spy_game);
-        verify(mock_agentDispatcher).findMove(eq(spy_game.board()), eq(1), any());
+        verify(mock_agentDispatcher).findMove(eq(spy_game.board()), eq(1));
     }
 
     @Test

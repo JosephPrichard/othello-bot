@@ -1,9 +1,8 @@
 /*
- * Copyright (c) Joseph Prichard 2023.
+ * Copyright (c) Joseph Prichard 2024.
  */
 
 package othello;
 
 public record Move(Tile tile, float heuristic) {
-
 }

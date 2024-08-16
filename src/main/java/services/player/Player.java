@@ -21,6 +21,28 @@ public record Player(long id, String name) {
         return Long.parseLong(strippedId);
     }
 
+    public boolean isBot() {
+        return Bot.isBotId(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        var player = (Player) o;
+        return id == player.id();
+    }
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return Long.toString(id);
+    }
+
     public static class Bot {
 
         public static final int MAX_BOT_LEVEL = 6;
@@ -52,27 +74,5 @@ public record Player(long id, String name) {
                 default -> throw new IllegalStateException("Invalid bot id: " + id);
             };
         }
-    }
-
-    public boolean isBot() {
-        return Bot.isBotId(id);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        var player = (Player) o;
-        return id == player.id();
-    }
-
-    @Override
-    public int hashCode() {
-        return Long.hashCode(id);
-    }
-
-    @Override
-    public String toString() {
-        return Long.toString(id);
     }
 }

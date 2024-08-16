@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static utils.LogUtils.LOGGER;
@@ -63,32 +64,24 @@ public class MoveCommand extends Command {
         var currPlayer = game.currentPlayer();
         var depth = Player.Bot.getDepthFromId(currPlayer.id());
 
-        var latch = new CountDownLatch(1);
-        AtomicReference<GameView> view = new AtomicReference<>(null);
-
-        // queue an agent request which will find the best move, make the move, and send back a response
-        agentDispatcher.findMove(game.board(), depth, (bestMove) -> {
-            try {
-                var newGame = gameService.makeMove(currPlayer, bestMove.tile());
-
-                var tempView = newGame.isOver() ?
-                    onGameOver(newGame, bestMove.tile()) :
-                    buildMoveView(newGame, bestMove.tile());
-
-                view.set(tempView);
-                latch.countDown();
-            } catch (TurnException | NotPlayingException | InvalidMoveException ex) {
-                // this shouldn't happen: the bot should only make legal moves when it is currently it's turn
-                // if we get an error like this, the only thing we can do is log it and debug later
-                LOGGER.warning("Error occurred in an agent callback thread " + ex);
-            }
-        });
-
         try {
-            latch.await();
-            ctx.sendView(view.get());
-        } catch (InterruptedException ex) {
-            LOGGER.warning("Error occurred while waiting for a bot response " + ex);
+            // queue an agent request which will find the best move, make the move, and send back a response
+            var future = agentDispatcher.findMove(game.board(), depth);
+            var bestMove = future.get();
+
+            var newGame = gameService.makeMove(currPlayer, bestMove.tile());
+
+            var view = newGame.isOver() ?
+                onGameOver(newGame, bestMove.tile()) :
+                buildMoveView(newGame, bestMove.tile());
+
+            ctx.sendView(view);
+        } catch (InterruptedException | ExecutionException e) {
+            LOGGER.warning("Error occurred while waiting for a bot response " + e);
+        } catch (TurnException | NotPlayingException | InvalidMoveException e) {
+            // this shouldn't happen: the bot should only make legal moves when it is currently it's turn
+            // if we get an error like this, the only thing we can do is log it and debug later
+            LOGGER.warning("Error occurred after handling a bot move" + e);
         }
     }
 

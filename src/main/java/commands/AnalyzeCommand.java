@@ -14,8 +14,10 @@ import services.agent.IAgentDispatcher;
 import services.game.IGameService;
 import services.player.Player;
 
+
 import java.awt.*;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static commands.string.StringFormat.rightPad;
 import static services.player.Player.Bot.MAX_BOT_LEVEL;
@@ -80,13 +82,18 @@ public class AnalyzeCommand extends Command {
         ctx.reply("Analyzing... Wait a second...", hook -> {
             LOGGER.info("Starting board state analysis");
 
-            agentDispatcher.findMoves(game.board(), depth, (rankedMoves) -> {
+            try {
+                var future = agentDispatcher.findMoves(game.board(), depth);
+                var rankedMoves = future.get();
+
                 var image = BoardRenderer.drawBoardAnalysis(game.board(), rankedMoves);
                 var view = GameStateView.createAnalysisView(game, image, finalLevel, player);
 
                 view.editUsingHook(hook);
                 LOGGER.info("Finished board state analysis");
-            });
+            } catch (ExecutionException | InterruptedException e) {
+                LOGGER.warning("Error occurred while responding to an analyze command " + e);
+            }
         });
     }
 }

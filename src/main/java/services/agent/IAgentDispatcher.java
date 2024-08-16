@@ -8,11 +8,11 @@ import othello.Move;
 import othello.OthelloBoard;
 
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.concurrent.Future;
 
 public interface IAgentDispatcher {
 
-    void findMoves(OthelloBoard board, int depth, Consumer<List<Move>> onComplete);
+    Future<List<Move>> findMoves(OthelloBoard board, int depth);
 
-    void findMove(OthelloBoard board, int depth, Consumer<Move> onComplete);
+    Future<Move> findMove(OthelloBoard board, int depth);
 }

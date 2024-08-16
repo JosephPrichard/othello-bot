@@ -17,10 +17,7 @@ import services.player.Player;
 
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 
 import static utils.LogUtils.LOGGER;
@@ -41,9 +38,13 @@ public class SimulateCommand extends Command {
     private void gameLoop(Game game, BlockingQueue<Optional<GameView>> queue, String id) {
         int depth = Player.Bot.getDepthFromId(game.currentPlayer().id());
 
-        final var board = game.board();
-        agentDispatcher.findMove(board, depth, (bestMove) -> {
+        var finished = false;
+        while (!finished) {
             try {
+                var board = game.board();
+                var future = agentDispatcher.findMove(board, depth);
+                var bestMove = future.get();
+
                 var nextGame = Game.from(game);
                 nextGame.makeMove(bestMove.tile());
 
@@ -55,17 +56,16 @@ public class SimulateCommand extends Command {
                     queue.put(Optional.empty());
 
                     LOGGER.info("Finished the game simulation: " + id);
+                    finished = true;
                 } else {
                     var view = GameStateView.createSimulationView(nextGame, bestMove.tile(), image);
                     queue.put(Optional.of(view));
-
-                    // each completion callback will recursively schedule the next action
-                    gameLoop(nextGame, queue, id);
+                    game = nextGame;
                 }
-            } catch (InterruptedException ex) {
-                LOGGER.log(Level.WARNING, "Failed to put a task on the game view queue", ex);
+            } catch (InterruptedException | ExecutionException x) {
+                LOGGER.log(Level.WARNING, "Failed to put a task on the game view queue", x);
             }
-        });
+        }
     }
 
     private void waitLoop(BlockingQueue<Optional<GameView>> queue, long delay, InteractionHook hook) {

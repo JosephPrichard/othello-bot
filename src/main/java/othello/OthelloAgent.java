@@ -25,10 +25,6 @@ public final class OthelloAgent {
         this((int) Math.pow(2, 12) + 1, 3000);
     }
 
-    public OthelloAgent(boolean useLoops) {
-        this((int) Math.pow(2, 12) + 1, 3000);
-    }
-
     public OthelloAgent(int ttSize, int maxTime) {
         this.table = new TTable(ttSize);
         this.maxTime = maxTime;
@@ -46,10 +42,7 @@ public final class OthelloAgent {
         // call the iterative deepening negamax to calculate the heuristic for each move and add it to list
         for (var move : moves) {
             var child = board.makeMoved(move);
-
             var heuristic = evaluateLoop(child, maxDepth - 1);
-//            var heuristic = evaluate(child, maxDepth - 1);
-
             rankedMoves.add(new Move(move, heuristic));
         }
 
@@ -66,9 +59,8 @@ public final class OthelloAgent {
             var row = move.tile().row();
             var col = move.tile().col();
 
-            if (duplicate[row][col]) {
+            if (duplicate[row][col])
                 iterator.remove();
-            }
             duplicate[row][col] = true;
         }
 
@@ -115,10 +107,6 @@ public final class OthelloAgent {
         return new Move(bestMove, bestHeuristic);
     }
 
-    /**
-     * Searches othello game tree with iterative deepening depth first search
-     * Starts from a relative depth of 1 until a specified relative max depth
-     */
     public float evaluateLoop(OthelloBoard board, int maxDepth) {
         if (!stack.isEmpty()) {
             stack.clear();
@@ -131,11 +119,6 @@ public final class OthelloAgent {
         return heuristic;
     }
 
-
-    /**
-     * Searches othello game tree with iterative deepening depth first search
-     * Starts from a relative depth of 1 until a specified relative max depth
-     */
     public float evaluate(OthelloBoard board, int maxDepth) {
         float heuristic = 0;
         for (var depthLimit = 1; depthLimit < maxDepth; depthLimit++) {
@@ -177,10 +160,6 @@ public final class OthelloAgent {
         }
     }
 
-
-    /**
-     * Searches othello game tree using an iterative variant of minimax with alpha beta pruning to evaluate how good a board is
-     */
     private float evaluateLoop(Deque<StackFrame> stack, OthelloBoard initialBoard, int startDepth) {
         stack.push(new StackFrame(initialBoard, startDepth, -INF, INF));
 
@@ -278,9 +257,6 @@ public final class OthelloAgent {
         return heuristic;
     }
 
-    /**
-     * Searches othello game tree using minimax with alpha beta pruning to evaluate how good a board is
-     */
     public float evaluate(OthelloBoard board, int depth, float alpha, float beta) {
         // stop early when we reach depth floor, or we've gone over time
         if (depth == 0 || (depth >= MIN_DEPTH && System.currentTimeMillis() > stopTime)) {
