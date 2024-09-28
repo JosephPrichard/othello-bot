@@ -4,30 +4,25 @@
 
 package commands;
 
-import commands.context.CommandContext;
-import commands.views.GameStateView;
-import othello.BoardRenderer;
-import services.challenge.Challenge;
-import services.challenge.IChallengeScheduler;
-import services.game.IGameService;
-import services.game.exceptions.AlreadyPlayingException;
-import services.player.Player;
+import lombok.AllArgsConstructor;
+import domain.BoardRenderer;
+import models.Challenge;
+import services.ChallengeScheduler;
+import services.GameService;
+import models.Player;
+import services.exceptions.AlreadyPlayingException;
 
 import java.util.Objects;
 
-import static utils.LogUtils.LOGGER;
+import static utils.Log.LOGGER;
 
-public class ChallengeCommand extends Command {
+@AllArgsConstructor
+public class ChallengeCommand extends CommandHandler {
 
-    private final IGameService gameService;
-    private final IChallengeScheduler challengeScheduler;
+    private final GameService gameService;
+    private final ChallengeScheduler challengeScheduler;
 
-    public ChallengeCommand(IGameService gameService, IChallengeScheduler challengeScheduler) {
-        this.gameService = gameService;
-        this.challengeScheduler = challengeScheduler;
-    }
-
-    public String buildChallengeStr(Player challenged, Player challenger) {
+    public static String buildChallengeStr(Player challenged, Player challenger) {
         return "<@" +
             challenged.id() +
             ">, " +

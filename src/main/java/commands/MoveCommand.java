@@ -4,44 +4,32 @@
 
 package commands;
 
-import commands.context.CommandContext;
-import commands.views.GameResultView;
-import commands.views.GameStateView;
-import commands.views.GameView;
+import lombok.AllArgsConstructor;
+import models.Game;
+import models.Player;
 import net.dv8tion.jda.api.interactions.commands.Command.Choice;
 import net.dv8tion.jda.api.interactions.commands.CommandAutoCompleteInteraction;
-import othello.BoardRenderer;
-import othello.OthelloBoard;
-import othello.Tile;
-import services.agent.IAgentDispatcher;
-import services.game.Game;
-import services.game.IGameService;
-import services.game.exceptions.InvalidMoveException;
-import services.game.exceptions.NotPlayingException;
-import services.game.exceptions.TurnException;
-import services.player.Player;
-import services.stats.IStatsService;
+import domain.BoardRenderer;
+import domain.OthelloBoard;
+import domain.Tile;
+import services.*;
+import services.exceptions.InvalidMoveException;
+import services.exceptions.NotPlayingException;
+import services.exceptions.TurnException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static utils.LogUtils.LOGGER;
+import static utils.Log.LOGGER;
 
-public class MoveCommand extends Command {
+@AllArgsConstructor
+public class MoveCommand extends CommandHandler {
 
-    private final IGameService gameService;
-    private final IStatsService statsService;
-    private final IAgentDispatcher agentDispatcher;
-
-    public MoveCommand(IGameService gameService, IStatsService statsService, IAgentDispatcher agentDispatcher) {
-        this.gameService = gameService;
-        this.statsService = statsService;
-        this.agentDispatcher = agentDispatcher;
-    }
+    private final GameService gameService;
+    private final StatsService statsService;
+    private final AgentDispatcher agentDispatcher;
 
     public GameView buildMoveView(Game game, Tile move) {
         var image = BoardRenderer.drawBoardMoves(game.board());

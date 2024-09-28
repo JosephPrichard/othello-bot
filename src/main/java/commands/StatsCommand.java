@@ -4,27 +4,24 @@
 
 package commands;
 
-import commands.context.CommandContext;
+import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
-import services.player.Player;
-import services.stats.IStatsService;
-import services.stats.Stats;
+import models.Player;
+import models.Stats;
+import services.StatsService;
 
 import java.awt.*;
 
-import static utils.LogUtils.LOGGER;
+import static utils.Log.LOGGER;
 
-public class StatsCommand extends Command {
+@AllArgsConstructor
+public class StatsCommand extends CommandHandler {
 
-    private final IStatsService statsService;
+    private final StatsService statsService;
 
-    public StatsCommand(IStatsService statsService) {
-        this.statsService = statsService;
-    }
-
-    public MessageEmbed buildStatsEmbed(Stats stats, User author) {
+    public static MessageEmbed buildStatsEmbed(Stats stats, User author) {
         var embed = new EmbedBuilder();
         embed.setColor(Color.GREEN)
             .setTitle(stats.player().name() + "'s stats")

@@ -4,21 +4,19 @@
 
 package commands;
 
-import commands.context.CommandContext;
+import models.Game;
+import models.GameResult;
+import models.Player;
+import models.StatsResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
-import othello.Tile;
-import services.agent.IAgentDispatcher;
-import services.game.Game;
-import services.game.GameResult;
-import services.game.IGameService;
-import services.game.exceptions.InvalidMoveException;
-import services.game.exceptions.NotPlayingException;
-import services.game.exceptions.TurnException;
-import services.player.Player;
-import services.stats.StatsResult;
-import services.stats.IStatsService;
+import domain.Move;
+import domain.Tile;
+import services.*;
+import services.exceptions.InvalidMoveException;
+import services.exceptions.NotPlayingException;
+import services.exceptions.TurnException;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -27,16 +25,16 @@ import static org.mockito.Mockito.*;
 
 public class TestMoveCommand {
 
-    private IGameService mock_gameService;
-    private IStatsService mock_statsService;
-    private IAgentDispatcher mock_agentDispatcher;
+    private GameService mock_gameService;
+    private StatsService mock_statsService;
+    private AgentDispatcher mock_agentDispatcher;
     private MoveCommand spy_moveCommand;
 
     @BeforeEach
     public void beforeEach() {
-        mock_gameService = mock(IGameService.class);
-        mock_statsService = mock(IStatsService.class);
-        mock_agentDispatcher = mock(IAgentDispatcher.class);
+        mock_gameService = mock(GameService.class);
+        mock_statsService = mock(StatsService.class);
+        mock_agentDispatcher = mock(AgentDispatcher.class);
         spy_moveCommand = spy(new MoveCommand(mock_gameService, mock_statsService, mock_agentDispatcher));
     }
 

@@ -4,20 +4,19 @@
 
 package services;
 
+import models.Game;
+import models.Player;
 import net.dv8tion.jda.internal.utils.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import othello.Tile;
-import services.game.Game;
-import services.game.GameService;
-import services.game.exceptions.AlreadyPlayingException;
-import services.game.exceptions.InvalidMoveException;
-import services.game.exceptions.NotPlayingException;
-import services.game.exceptions.TurnException;
-import services.player.Player;
+import domain.Tile;
+import services.exceptions.AlreadyPlayingException;
+import services.exceptions.InvalidMoveException;
+import services.exceptions.NotPlayingException;
+import services.exceptions.TurnException;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;

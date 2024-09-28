@@ -4,36 +4,29 @@
 
 package commands;
 
-import commands.context.CommandContext;
-import commands.views.GameResultView;
-import commands.views.GameStateView;
-import commands.views.GameView;
+import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import othello.BoardRenderer;
-import othello.OthelloBoard;
-import services.agent.AgentDispatcher;
-import services.game.Game;
-import services.player.Player;
+import domain.BoardRenderer;
+import domain.OthelloBoard;
+import services.AgentDispatcher;
+import models.Game;
+import models.Player;
 
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.logging.Level;
 
-import static utils.LogUtils.LOGGER;
+import static utils.Log.LOGGER;
 
-public class SimulateCommand extends Command {
+@AllArgsConstructor
+public class SimulateCommand extends CommandHandler {
 
     public static final long MAX_DELAY = 5000L;
     public static final long MIN_DELAY = 1000L;
 
     private final ScheduledExecutorService scheduler;
     private final AgentDispatcher agentDispatcher;
-
-    public SimulateCommand(AgentDispatcher agentDispatcher, ScheduledExecutorService scheduler) {
-        this.agentDispatcher = agentDispatcher;
-        this.scheduler = scheduler;
-    }
 
     private void gameLoop(Game game, BlockingQueue<Optional<GameView>> queue, String id) {
         int depth = Player.Bot.getDepthFromId(game.currentPlayer().id());

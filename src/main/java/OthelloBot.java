@@ -3,7 +3,7 @@
  */
 
 import commands.*;
-import commands.context.SlashCommandContext;
+import commands.SlashCommandContext;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -14,12 +14,12 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import services.DataSource;
-import services.agent.AgentDispatcher;
-import services.challenge.ChallengeScheduler;
-import services.game.GameService;
-import services.player.UserFetcher;
-import services.stats.StatsDao;
-import services.stats.StatsService;
+import services.AgentDispatcher;
+import services.ChallengeScheduler;
+import services.GameService;
+import services.UserFetcher;
+import services.StatsDao;
+import services.StatsService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,12 +30,12 @@ import java.util.logging.Level;
 
 import static commands.SimulateCommand.MAX_DELAY;
 import static commands.SimulateCommand.MIN_DELAY;
-import static services.player.Player.Bot.MAX_BOT_LEVEL;
-import static utils.LogUtils.LOGGER;
+import static models.Player.Bot.MAX_BOT_LEVEL;
+import static utils.Log.LOGGER;
 
 public class OthelloBot extends ListenerAdapter {
 
-    private final Map<String, Command> commandMap = new HashMap<>();
+    private final Map<String, CommandHandler> commandMap = new HashMap<>();
 
     public static final int CORES = Runtime.getRuntime().availableProcessors();
 
@@ -72,7 +72,7 @@ public class OthelloBot extends ListenerAdapter {
         commandMap.put("analyze", new AnalyzeCommand(gameService, agentDispatcher));
         commandMap.put("stats", new StatsCommand(statsService));
         commandMap.put("leaderboard", new LeaderBoardCommand(statsService));
-        commandMap.put("simulate", new SimulateCommand(agentDispatcher, scheduler));
+        commandMap.put("simulate", new SimulateCommand(scheduler, agentDispatcher));
     }
 
     public static List<SlashCommandData> getCommandData() {

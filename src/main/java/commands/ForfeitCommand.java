@@ -4,23 +4,18 @@
 
 package commands;
 
-import commands.context.CommandContext;
-import commands.views.GameResultView;
-import othello.BoardRenderer;
-import services.game.IGameService;
-import services.stats.IStatsService;
+import lombok.AllArgsConstructor;
+import domain.BoardRenderer;
+import services.GameService;
+import services.StatsService;
 
-import static utils.LogUtils.LOGGER;
+import static utils.Log.LOGGER;
 
-public class ForfeitCommand extends Command {
+@AllArgsConstructor
+public class ForfeitCommand extends CommandHandler {
 
-    private final IGameService gameService;
-    private final IStatsService statsService;
-
-    public ForfeitCommand(IGameService gameService, IStatsService statsService) {
-        this.gameService = gameService;
-        this.statsService = statsService;
-    }
+    private final GameService gameService;
+    private final StatsService statsService;
 
     @Override
     public void onCommand(CommandContext ctx) {

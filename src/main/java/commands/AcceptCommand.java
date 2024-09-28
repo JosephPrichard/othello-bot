@@ -4,27 +4,21 @@
 
 package commands;
 
-import commands.context.CommandContext;
-import commands.views.GameStateView;
-import othello.BoardRenderer;
-import services.challenge.Challenge;
-import services.challenge.IChallengeScheduler;
-import services.game.IGameService;
-import services.game.exceptions.AlreadyPlayingException;
+import lombok.AllArgsConstructor;
+import models.Challenge;
+import domain.BoardRenderer;
+import services.*;
+import services.exceptions.AlreadyPlayingException;
 
 import java.util.Objects;
 
-import static utils.LogUtils.LOGGER;
+import static utils.Log.LOGGER;
 
-public class AcceptCommand extends Command {
+@AllArgsConstructor
+public class AcceptCommand extends CommandHandler {
 
-    private final IGameService gameService;
-    private final IChallengeScheduler challengeScheduler;
-
-    public AcceptCommand(IGameService gameService, IChallengeScheduler challengeScheduler) {
-        this.gameService = gameService;
-        this.challengeScheduler = challengeScheduler;
-    }
+    private final GameService gameService;
+    private final ChallengeScheduler challengeScheduler;
 
     @Override
     public void onCommand(CommandContext ctx) {
