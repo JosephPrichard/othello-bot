@@ -10,7 +10,6 @@ import models.Challenge;
 import services.ChallengeScheduler;
 import services.GameService;
 import models.Player;
-import services.exceptions.AlreadyPlayingException;
 
 import java.util.Objects;
 
@@ -63,7 +62,7 @@ public class ChallengeCommand extends CommandHandler {
 
             var view = GameStateView.createGameStartView(game, image);
             ctx.replyView(view);
-        } catch (AlreadyPlayingException ex) {
+        } catch (GameService.AlreadyPlayingException ex) {
             ctx.reply("You're already in a game");
         }
 

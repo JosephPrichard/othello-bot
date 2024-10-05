@@ -10,7 +10,6 @@ import models.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import services.*;
-import services.exceptions.AlreadyPlayingException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -29,7 +28,7 @@ public class TestAcceptCommand {
     }
 
     @Test
-    public void whenCommand_success() throws AlreadyPlayingException {
+    public void whenCommand_success() throws GameService.AlreadyPlayingException {
         var mock_cmdCtx = mock(CommandContext.class);
 
         var callingPlayer = new Player(1000L);
@@ -50,7 +49,7 @@ public class TestAcceptCommand {
     }
 
     @Test
-    public void whenCommand_withNoChallenge() throws AlreadyPlayingException {
+    public void whenCommand_withNoChallenge() throws GameService.AlreadyPlayingException {
         var mock_cmdCtx = mock(CommandContext.class);
 
         var callingPlayer = new Player(1000L);

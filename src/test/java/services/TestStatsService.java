@@ -4,10 +4,7 @@
 
 package services;
 
-import models.GameResult;
-import models.Player;
-import models.Stats;
-import models.StatsEntity;
+import models.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,7 +69,7 @@ public class TestStatsService {
     public void whenUpdateStats_correctResult() {
         var winner = new Player(1000, "Player1");
         var loser = new Player(1001, "Player2");
-        var result = GameResult.WinLoss(winner, loser);
+        var result = Game.Result.WinLoss(winner, loser);
 
         when(mock_statsDao.getOrSaveStats(1000L))
             .thenReturn(new StatsEntity(1000L, 1015f, 1, 1, 1));
@@ -95,7 +92,7 @@ public class TestStatsService {
     public void whenUpdateStats_ifDraw_correctResult() {
         var winner = new Player(1000, "Player1");
         var loser = new Player(1001, "Player2");
-        var result = GameResult.Draw(winner, loser);
+        var result = Game.Result.Draw(winner, loser);
 
         when(mock_statsDao.getOrSaveStats(1000L))
             .thenReturn(new StatsEntity(1000L, 1015f, 1, 1, 1));

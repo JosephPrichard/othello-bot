@@ -13,9 +13,6 @@ import domain.BoardRenderer;
 import domain.OthelloBoard;
 import domain.Tile;
 import services.*;
-import services.exceptions.InvalidMoveException;
-import services.exceptions.NotPlayingException;
-import services.exceptions.TurnException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +63,7 @@ public class MoveCommand extends CommandHandler {
             ctx.sendView(view);
         } catch (InterruptedException | ExecutionException e) {
             LOGGER.warning("Error occurred while waiting for a bot response " + e);
-        } catch (TurnException | NotPlayingException | InvalidMoveException e) {
+        } catch (GameService.TurnException | GameService.NotPlayingException | GameService.InvalidMoveException e) {
             // this shouldn't happen: the bot should only make legal moves when it is currently it's turn
             // if we get an error like this, the only thing we can do is log it and debug later
             LOGGER.warning("Error occurred after handling a bot move" + e);
@@ -97,11 +94,11 @@ public class MoveCommand extends CommandHandler {
             }
 
             LOGGER.info("Player " + player + " made move on game");
-        } catch (TurnException e) {
+        } catch (GameService.TurnException e) {
             ctx.reply("It isn't your turn.");
-        } catch (NotPlayingException e) {
+        } catch (GameService.NotPlayingException e) {
             ctx.reply("You're not currently in a game.");
-        } catch (InvalidMoveException e) {
+        } catch (GameService.InvalidMoveException e) {
             ctx.reply("Can't make a move to " + strMove + ".");
         }
     }

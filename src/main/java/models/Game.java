@@ -101,24 +101,35 @@ public class Game {
         return board.isBlackMove();
     }
 
-    public GameResult createResult() {
+    public Result createResult() {
         var diff = blackScore() - whiteScore();
         if (diff > 0) {
-            return GameResult.WinLoss(blackPlayer, whitePlayer);
+            return Result.WinLoss(blackPlayer, whitePlayer);
         } else if (diff < 0) {
-            return GameResult.WinLoss(whitePlayer, blackPlayer);
+            return Result.WinLoss(whitePlayer, blackPlayer);
         } else {
-            return GameResult.Draw(whitePlayer, blackPlayer);
+            return Result.Draw(whitePlayer, blackPlayer);
         }
     }
 
-    public GameResult createForfeitResult(Player forfeitingPlayer) {
+    public Result createForfeitResult(Player forfeitingPlayer) {
         if (whitePlayer.equals(forfeitingPlayer)) {
-            return GameResult.WinLoss(blackPlayer, whitePlayer);
+            return Result.WinLoss(blackPlayer, whitePlayer);
         } else if (blackPlayer.equals(forfeitingPlayer)) {
-            return GameResult.WinLoss(whitePlayer, blackPlayer);
+            return Result.WinLoss(whitePlayer, blackPlayer);
         } else {
             throw new IllegalStateException("Player not part of a game attempted to forfeit");
+        }
+    }
+
+    public record Result(Player winner, Player loser, boolean isDraw) {
+
+        public static Result Draw(Player playerOne, Player playerTwo) {
+            return new Result(playerOne, playerTwo, true);
+        }
+
+        public static Result WinLoss(Player winner, Player loser) {
+            return new Result(winner, loser, false);
         }
     }
 }

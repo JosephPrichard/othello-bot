@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import models.Challenge;
 import domain.BoardRenderer;
 import services.*;
-import services.exceptions.AlreadyPlayingException;
 
 import java.util.Objects;
 
@@ -36,7 +35,7 @@ public class AcceptCommand extends CommandHandler {
 
             var view = GameStateView.createGameStartView(game, image);
             ctx.replyView(view);
-        } catch (AlreadyPlayingException ex) {
+        } catch (GameService.AlreadyPlayingException ex) {
             ctx.reply("One or more players are already in a game.");
         }
 

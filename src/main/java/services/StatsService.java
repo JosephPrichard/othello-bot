@@ -4,10 +4,7 @@
 
 package services;
 
-import models.GameResult;
-import models.Player;
-import models.Stats;
-import models.StatsResult;
+import models.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,13 +71,13 @@ public class StatsService {
         return rating - ELO_K * probability;
     }
 
-    public StatsResult writeStats(GameResult result) {
+    public Stats.Result writeStats(Game.Result result) {
         var win = statsDao.getOrSaveStats(result.winner().id());
         var loss = statsDao.getOrSaveStats(result.loser().id());
 
         if (result.isDraw() || result.winner().equals(result.loser())) {
             // draw games don't need to update the elo, nor do games against self
-            var stats = new StatsResult(win.elo, loss.elo, 0, 0);
+            var stats = new Stats.Result(win.elo, loss.elo, 0, 0);
             LOGGER.info("Wrote stats with result: " + stats);
             return stats;
         }
@@ -97,7 +94,7 @@ public class StatsService {
         var winDiff = win.elo - winEloBefore;
         var lossDiff = loss.elo - lossEloBefore;
 
-        var stats = new StatsResult(win.elo, loss.elo, winDiff, lossDiff);
+        var stats = new Stats.Result(win.elo, loss.elo, winDiff, lossDiff);
         LOGGER.info("Wrote stats with result: " + stats);
         return stats;
     }

@@ -12,7 +12,6 @@ import java.util.Random;
 public class TTable {
 
     public record Node(long key, float heuristic, int depth) {
-
     }
 
     private final int[][] table;

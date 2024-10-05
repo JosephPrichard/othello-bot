@@ -22,4 +22,23 @@ public record Stats(Player player, float elo, int won, int lost, int drawn) {
         }
         return won / (float) (won + lost + drawn) * 100f;
     }
+
+    public record Result(float winnerElo, float loserElo, float winnerEloDiff, float loserEloDiff) {
+
+        public Result() {
+            this(0, 0, 0, 0);
+        }
+
+        private static String formatElo(float elo) {
+            return elo >= 0 ? "+" + elo : Float.toString(elo);
+        }
+
+        public String formatWinnerEloDiff() {
+            return formatElo(winnerEloDiff);
+        }
+
+        public String formatLoserEloDiff() {
+            return formatElo(loserEloDiff);
+        }
+    }
 }

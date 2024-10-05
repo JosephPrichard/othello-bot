@@ -302,4 +302,12 @@ public class OthelloBoard {
             board.makeMove(moves.get(0));
         }
     }
+
+    public static class BoardSizeException extends RuntimeException {
+
+    }
+
+    public static class BoardDeserializationException extends RuntimeException {
+
+    }
 }

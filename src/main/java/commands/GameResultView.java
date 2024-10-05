@@ -4,18 +4,17 @@
 
 package commands;
 
+import models.Stats;
 import net.dv8tion.jda.api.EmbedBuilder;
 import domain.Tile;
 import models.Game;
-import models.GameResult;
 import models.Player;
-import models.StatsResult;
 
 import java.awt.image.BufferedImage;
 
 public class GameResultView {
 
-    private static String getStatsMessage(GameResult gameRes, StatsResult statsRes) {
+    private static String getStatsMessage(Game.Result gameRes, Stats.Result statsRes) {
         return gameRes.winner().name() +
             "'s new rating is " + statsRes.winnerElo() +
             " (" + statsRes.formatWinnerEloDiff() + ") \n" +
@@ -36,7 +35,7 @@ public class GameResultView {
         return winner.name() + " won with " + move + "\n";
     }
 
-    private static String getTag(GameResult result) {
+    private static String getTag(Game.Result result) {
         var message = "";
         if (!result.winner().isBot()) {
             message = "<@" + result.winner() + "> ";
@@ -46,7 +45,7 @@ public class GameResultView {
         return message;
     }
 
-    public static GameView createGameOverView(GameResult result, StatsResult statsResult, Tile move, Game game, BufferedImage image) {
+    public static GameView createGameOverView(Game.Result result, Stats.Result statsResult, Tile move, Game game, BufferedImage image) {
         var embed = new EmbedBuilder();
 
         var desc = getMoveMessage(result.winner(), move.toString()) +
@@ -60,7 +59,7 @@ public class GameResultView {
             .setImage(image);
     }
 
-    public static GameView createForfeitView(GameResult result, StatsResult statsResult, BufferedImage image) {
+    public static GameView createForfeitView(Game.Result result, Stats.Result statsResult, BufferedImage image) {
         var embed = new EmbedBuilder();
 
         var desc = getForfeitMessage(result.winner()) + "\n" +

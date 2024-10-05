@@ -44,4 +44,7 @@ public record Tile(int row, int col) {
         }
         return false;
     }
+
+    public record Move(Tile tile, float heuristic) {
+    }
 }

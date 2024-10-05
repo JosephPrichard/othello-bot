@@ -9,13 +9,8 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.benmanes.caffeine.cache.RemovalCause;
 import com.github.benmanes.caffeine.cache.Scheduler;
 import models.Game;
-import models.GameResult;
 import models.Player;
 import domain.Tile;
-import services.exceptions.AlreadyPlayingException;
-import services.exceptions.InvalidMoveException;
-import services.exceptions.NotPlayingException;
-import services.exceptions.TurnException;
 
 import javax.annotation.Nullable;
 import javax.persistence.PersistenceException;
@@ -26,6 +21,18 @@ import java.util.logging.Level;
 import static utils.Log.LOGGER;
 
 public class GameService {
+
+    public static class InvalidMoveException extends Exception {
+    }
+
+    public static class AlreadyPlayingException extends Exception {
+    }
+
+    public static class TurnException extends Exception {
+    }
+
+    public static class NotPlayingException extends Exception {
+    }
 
     private final LoadingCache<Long, Optional<Game>> games;
     private final StatsService statsService;
@@ -145,7 +152,7 @@ public class GameService {
 
     private void onGameExpiry(Game game) {
         // call the stats service to update the stats where the current player loses
-        var forfeitResult = GameResult.WinLoss(game.otherPlayer(), game.currentPlayer());
+        var forfeitResult = Game.Result.WinLoss(game.otherPlayer(), game.currentPlayer());
         statsService.writeStats(forfeitResult);
     }
 }

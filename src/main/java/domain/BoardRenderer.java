@@ -58,7 +58,7 @@ public class BoardRenderer {
         return boardImage;
     }
 
-    public static BufferedImage drawBoardAnalysis(OthelloBoard board, List<Move> bestMoves) {
+    public static BufferedImage drawBoardAnalysis(OthelloBoard board, List<Tile.Move> bestMoves) {
         var boardImage = new BufferedImage(BACKGROUND_IMAGE.getWidth(), BACKGROUND_IMAGE.getHeight(), BACKGROUND_IMAGE.getType());
         var g = drawBoardDiscs(board, boardImage);
 

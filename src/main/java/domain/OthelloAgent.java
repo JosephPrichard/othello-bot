@@ -30,24 +30,24 @@ public final class OthelloAgent {
         this.maxTime = maxTime;
     }
 
-    public List<Move> findRankedMoves(OthelloBoard board, int maxDepth) {
+    public List<Tile.Move> findRankedMoves(OthelloBoard board, int maxDepth) {
         var startTime = System.currentTimeMillis();
         nodesVisited = 0;
         stopTime = startTime + maxTime;
 
         var moves = board.findPotentialMoves();
 
-        List<Move> rankedMoves = new ArrayList<>();
+        List<Tile.Move> rankedMoves = new ArrayList<>();
 
         // call the iterative deepening negamax to calculate the heuristic for each move and add it to list
         for (var move : moves) {
             var child = board.makeMoved(move);
             var heuristic = evaluateLoop(child, maxDepth - 1);
-            rankedMoves.add(new Move(move, heuristic));
+            rankedMoves.add(new Tile.Move(move, heuristic));
         }
 
         // sort the moves to rank them properly
-        Comparator<Move> comparator = board.isBlackMove() ?
+        Comparator<Tile.Move> comparator = board.isBlackMove() ?
             (m1, m2) -> Float.compare(m2.heuristic(), m1.heuristic()) :
             (m1, m2) -> Float.compare(m1.heuristic(), m2.heuristic());
         rankedMoves.sort(comparator);
@@ -68,7 +68,7 @@ public final class OthelloAgent {
         return rankedMoves;
     }
 
-    public Move findBestMove(OthelloBoard board, int maxDepth) {
+    public Tile.Move findBestMove(OthelloBoard board, int maxDepth) {
         var startTime = System.currentTimeMillis();
         nodesVisited = 0;
         stopTime = startTime + maxTime;
@@ -104,7 +104,7 @@ public final class OthelloAgent {
         );
 
         table.clear();
-        return new Move(bestMove, bestHeuristic);
+        return new Tile.Move(bestMove, bestHeuristic);
     }
 
     public float evaluateLoop(OthelloBoard board, int maxDepth) {

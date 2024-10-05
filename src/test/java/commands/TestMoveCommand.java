@@ -5,18 +5,13 @@
 package commands;
 
 import models.Game;
-import models.GameResult;
 import models.Player;
-import models.StatsResult;
+import models.Stats;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
-import domain.Move;
 import domain.Tile;
 import services.*;
-import services.exceptions.InvalidMoveException;
-import services.exceptions.NotPlayingException;
-import services.exceptions.TurnException;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -39,7 +34,7 @@ public class TestMoveCommand {
     }
 
     @Test
-    public void whenCommand_ifPlayer_success() throws TurnException, NotPlayingException, InvalidMoveException {
+    public void whenCommand_ifPlayer_success() throws GameService.TurnException, GameService.NotPlayingException, GameService.InvalidMoveException {
         var mock_cmdCtx = mock(CommandContext.class);
 
         when(mock_cmdCtx.getStringParam("move")).thenReturn("c4");
@@ -59,7 +54,7 @@ public class TestMoveCommand {
     }
 
     @Test
-    public void whenCommand_ifBot_success() throws TurnException, NotPlayingException, InvalidMoveException {
+    public void whenCommand_ifBot_success() throws GameService.TurnException, GameService.NotPlayingException, GameService.InvalidMoveException {
         var mock_cmdCtx = mock(CommandContext.class);
 
         when(mock_cmdCtx.getStringParam("move")).thenReturn("c4");
@@ -71,10 +66,10 @@ public class TestMoveCommand {
         var spy_game = spy(Game.start(botPlayer, callingPlayer));
         when(spy_game.currentPlayer()).thenReturn(botPlayer);
 
-        Answer<CompletableFuture<Move>> stubbedFindMove = invocation -> {
+        Answer<CompletableFuture<Tile.Move>> stubbedFindMove = invocation -> {
             // mock the response from the agent to be anything - this test doesn't need to know what it is
-            CompletableFuture<Move> future = new CompletableFuture<>();
-            future.complete(new Move(Tile.fromNotation("a1"), 0));
+            CompletableFuture<Tile.Move> future = new CompletableFuture<>();
+            future.complete(new Tile.Move(Tile.fromNotation("a1"), 0));
             return future;
         };
         doAnswer(stubbedFindMove).when(mock_agentDispatcher).findMove(any(), anyInt());
@@ -90,7 +85,7 @@ public class TestMoveCommand {
     }
 
     @Test
-    public void whenCommand_ifGameOver_success() throws TurnException, NotPlayingException, InvalidMoveException {
+    public void whenCommand_ifGameOver_success() throws GameService.TurnException, GameService.NotPlayingException, GameService.InvalidMoveException {
         var mock_cmdCtx = mock(CommandContext.class);
 
         when(mock_cmdCtx.getStringParam("move")).thenReturn("c4");
@@ -104,12 +99,12 @@ public class TestMoveCommand {
         when(spy_game.whiteScore()).thenReturn(19);
         when(spy_game.blackScore()).thenReturn(21);
 
-        when(mock_statsService.writeStats(any())).thenReturn(new StatsResult());
+        when(mock_statsService.writeStats(any())).thenReturn(new Stats.Result());
         when(mock_gameService.makeMove(any(), any())).thenReturn(spy_game);
 
         spy_moveCommand.onCommand(mock_cmdCtx);
 
         verify(spy_moveCommand).onGameOver(spy_game, Tile.fromNotation("c4"));
-        verify(mock_statsService).writeStats(eq(new GameResult(blackPlayer, whitePlayer, false)));
+        verify(mock_statsService).writeStats(eq(new Game.Result(blackPlayer, whitePlayer, false)));
     }
 }

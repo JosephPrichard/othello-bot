@@ -6,7 +6,7 @@ package commands;
 
 import models.Game;
 import models.Player;
-import models.StatsResult;
+import models.Stats;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import services.*;
@@ -38,7 +38,7 @@ public class TestForfeitCommand {
         var game = Game.start(callingPlayer, otherPlayer);
         when(mock_gameService.getGame(any())).thenReturn(game);
         when(mock_statsService.writeStats(any()))
-            .thenReturn(new StatsResult());
+            .thenReturn(new Stats.Result());
 
         forfeitCommand.onCommand(mock_cmdCtx);
 

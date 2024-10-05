@@ -4,9 +4,9 @@
 
 package services;
 
-import domain.Move;
 import domain.OthelloAgent;
 import domain.OthelloBoard;
+import domain.Tile;
 
 import java.util.List;
 import java.util.concurrent.*;
@@ -33,8 +33,8 @@ public class AgentDispatcher {
         this.agentsQueue = agentsQueue;
     }
 
-    public Future<List<Move>> findMoves(OthelloBoard board, int depth) {
-        CompletableFuture<List<Move>> future = new CompletableFuture<>();
+    public Future<List<Tile.Move>> findMoves(OthelloBoard board, int depth) {
+        CompletableFuture<List<Tile.Move>> future = new CompletableFuture<>();
         cpuBndExecutor.submit(() -> {
             try {
                 var agent = agentsQueue.take();
@@ -44,7 +44,7 @@ public class AgentDispatcher {
                 agentsQueue.add(agent);
 
                 LOGGER.info("Finished agent ranked moves calculation of depth " + depth + ": "
-                    + moves.stream().map(Move::toString).reduce("", String::concat));
+                    + moves.stream().map(Tile.Move::toString).reduce("", String::concat));
                 future.complete(moves);
             } catch (Exception ex) {
                 LOGGER.warning("Error occurred while processing a find moves event " + ex);
@@ -53,8 +53,8 @@ public class AgentDispatcher {
         return future;
     }
 
-    public Future<Move> findMove(OthelloBoard board, int depth) {
-        CompletableFuture<Move> future = new CompletableFuture<>();
+    public Future<Tile.Move> findMove(OthelloBoard board, int depth) {
+        CompletableFuture<Tile.Move> future = new CompletableFuture<>();
         cpuBndExecutor.submit(() -> {
             try {
                 var agent = agentsQueue.take();

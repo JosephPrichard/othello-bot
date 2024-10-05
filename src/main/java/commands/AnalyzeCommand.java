@@ -5,10 +5,7 @@
 package commands;
 
 import lombok.AllArgsConstructor;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import domain.BoardRenderer;
-import domain.Move;
 import services.AgentDispatcher;
 import services.GameService;
 import models.Player;

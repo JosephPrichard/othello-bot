@@ -114,7 +114,7 @@ public class OthelloBot extends ListenerAdapter {
     public static String readToken() {
         var envFile = Main.class.getResourceAsStream(".env");
         if (envFile == null) {
-            System.out.println("Needs a .env file with a BOT_TOKEN field");
+            LOGGER.log(Level.SEVERE, "Needs a .env file with a BOT_TOKEN field");
             System.exit(1);
         }
 
@@ -124,12 +124,17 @@ public class OthelloBot extends ListenerAdapter {
         while (envScanner.hasNext()) {
             var line = envScanner.nextLine();
             var tokens = line.split("=");
+            if (tokens.length < 2) {
+                LOGGER.log(Level.SEVERE, "The env file line must have at least two tokens");
+                System.exit(1);
+            }
+
             if (tokens[0].equals("BOT_TOKEN")) {
                 botToken = tokens[1];
             }
         }
         if (botToken == null) {
-            System.out.println("You have to provide the BOT_TOKEN key  in the .env file");
+            LOGGER.log(Level.SEVERE, "You have to provide the BOT_TOKEN key  in the .env file");
             System.exit(1);
         }
 
