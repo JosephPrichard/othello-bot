@@ -2,11 +2,11 @@
  * Copyright (c) Joseph Prichard 2023.
  */
 
-package domain;
+package engine;
 
 import java.util.*;
 
-import static utils.Log.LOGGER;
+import static utils.LogUtils.LOGGER;
 
 public final class OthelloAgent {
 

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import domain.Tile;
+import engine.Tile;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
@@ -59,7 +59,7 @@ public class TestGameService {
         var game = gameService.getGame(whitePlayer);
 
         Assertions.assertNotNull(game);
-        Assertions.assertEquals(game.whitePlayer(), whitePlayer);
+        Assertions.assertEquals(game.getWhitePlayer(), whitePlayer);
     }
 
     @Test
@@ -108,8 +108,8 @@ public class TestGameService {
         var movedGame = gameService.makeMove(blackPlayer, Tile.fromNotation("d3"));
 
         Assertions.assertEquals(game, movedGame);
-        Assertions.assertNotEquals(game.board(), movedGame.board());
-        Assertions.assertNotEquals(game.board(), movedGame.board().makeMoved("d3"));
+        Assertions.assertNotEquals(game.getBoard(), movedGame.getBoard());
+        Assertions.assertNotEquals(game.getBoard(), movedGame.getBoard().makeMoved("d3"));
     }
 
     @Test
@@ -124,8 +124,8 @@ public class TestGameService {
                     var movedGame = gameService.makeMove(blackPlayer, Tile.fromNotation("d3"));
 
                     Assertions.assertEquals(game, movedGame);
-                    Assertions.assertNotEquals(game.board(), movedGame.board());
-                    Assertions.assertNotEquals(game.board(), movedGame.board().makeMoved("d3"));
+                    Assertions.assertNotEquals(game.getBoard(), movedGame.getBoard());
+                    Assertions.assertNotEquals(game.getBoard(), movedGame.getBoard().makeMoved("d3"));
 
                     return Pair.<Game, Exception>of(movedGame, null);
                 } catch (Exception e) {
@@ -143,8 +143,8 @@ public class TestGameService {
                 var movedGame = result.getLeft();
 
                 Assertions.assertEquals(game, movedGame);
-                Assertions.assertNotEquals(game.board(), movedGame.board());
-                Assertions.assertNotEquals(game.board(), movedGame.board().makeMoved("d3"));
+                Assertions.assertNotEquals(game.getBoard(), movedGame.getBoard());
+                Assertions.assertNotEquals(game.getBoard(), movedGame.getBoard().makeMoved("d3"));
 
                 successCount += 1;
             } else {

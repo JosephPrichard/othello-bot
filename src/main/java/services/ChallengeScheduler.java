@@ -9,7 +9,7 @@ import models.Challenge;
 import java.util.Map;
 import java.util.concurrent.*;
 
-import static utils.Log.LOGGER;
+import static utils.LogUtils.LOGGER;
 
 public class ChallengeScheduler {
 
@@ -29,7 +29,7 @@ public class ChallengeScheduler {
         Runnable scheduled = () -> {
             onExpiry.run();
             challenges.remove(challenge);
-            LOGGER.info("Challenge expired " + challenge.challenged().id() + " " + challenge.challenger().id());
+            LOGGER.info("Challenge expired " + challenge.getChallenged().getId() + " " + challenge.getChallenger().getId());
         };
         var future = scheduler.schedule(scheduled, 60, TimeUnit.SECONDS);
         challenges.put(challenge, future);

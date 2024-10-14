@@ -4,14 +4,14 @@
 
 package services;
 
-import domain.OthelloAgent;
-import domain.OthelloBoard;
-import domain.Tile;
+import engine.OthelloAgent;
+import engine.OthelloBoard;
+import engine.Tile;
 
 import java.util.List;
 import java.util.concurrent.*;
 
-import static utils.Log.LOGGER;
+import static utils.LogUtils.LOGGER;
 
 public class AgentDispatcher {
     private final ExecutorService cpuBndExecutor;
