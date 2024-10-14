@@ -32,7 +32,7 @@ public class ForfeitCommand extends CommandHandler {
 
         var statsResult = statsService.writeStats(result);
 
-        var image = BoardRenderer.drawBoard(game.board());
+        var image = BoardRenderer.drawBoard(game.getBoard());
         var view = GameResultView.createForfeitView(result, statsResult, image);
         ctx.replyView(view);
 

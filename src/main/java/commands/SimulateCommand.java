@@ -29,19 +29,19 @@ public class SimulateCommand extends CommandHandler {
     private final AgentDispatcher agentDispatcher;
 
     private void gameLoop(Game game, BlockingQueue<Optional<GameView>> queue, String id) {
-        int depth = Player.Bot.getDepthFromId(game.currentPlayer().id());
+        int depth = Player.Bot.getDepthFromId(game.getCurrentPlayer().getId());
 
         var finished = false;
         while (!finished) {
             try {
-                var board = game.board();
+                var board = game.getBoard();
                 var future = agentDispatcher.findMove(board, depth);
                 var bestMove = future.get();
 
                 var nextGame = Game.from(game);
                 nextGame.makeMove(bestMove.tile());
 
-                var image = BoardRenderer.drawBoardMoves(nextGame.board());
+                var image = BoardRenderer.drawBoardMoves(nextGame.getBoard());
 
                 if (nextGame.isOver()) {
                     var view = GameResultView.createSimulationView(nextGame, bestMove.tile(), image);
@@ -108,7 +108,7 @@ public class SimulateCommand extends CommandHandler {
         var id = UUID.randomUUID().toString();
         LOGGER.info("Starting the game simulation: " + id);
 
-        var image = BoardRenderer.drawBoardMoves(startGame.board());
+        var image = BoardRenderer.drawBoardMoves(startGame.getBoard());
         var startView = GameStateView.createSimulationStartView(startGame, image);
 
 

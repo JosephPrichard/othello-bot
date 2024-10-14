@@ -15,16 +15,16 @@ import java.awt.image.BufferedImage;
 public class GameResultView {
 
     private static String getStatsMessage(Game.Result gameRes, Stats.Result statsRes) {
-        return gameRes.winner().name() +
+        return gameRes.winner().getName() +
             "'s new rating is " + statsRes.winnerElo() +
             " (" + statsRes.formatWinnerEloDiff() + ") \n" +
-            gameRes.loser().name() +
+            gameRes.loser().getName() +
             "'s new rating is " + statsRes.loserElo() +
             " (" + statsRes.formatLoserEloDiff() + ") \n";
     }
 
     private static String getForfeitMessage(Player winner) {
-        return winner.name() + " won by forfeit \n";
+        return winner.getName()+ " won by forfeit \n";
     }
 
     private static String getScoreMessage(int whiteScore, int blackScore) {
@@ -32,15 +32,15 @@ public class GameResultView {
     }
 
     private static String getMoveMessage(Player winner, String move) {
-        return winner.name() + " won with " + move + "\n";
+        return winner.getName() + " won with " + move + "\n";
     }
 
     private static String getTag(Game.Result result) {
         var message = "";
         if (!result.winner().isBot()) {
-            message = "<@" + result.winner() + "> ";
+            message = result.winner().toAtString();
         } else if (!result.loser().isBot()) {
-            message = "<@" + result.loser() + "> ";
+            message = result.loser().toAtString();
         }
         return message;
     }
@@ -49,7 +49,7 @@ public class GameResultView {
         var embed = new EmbedBuilder();
 
         var desc = getMoveMessage(result.winner(), move.toString()) +
-            getScoreMessage(game.whiteScore(), game.blackScore()) + "\n" +
+            getScoreMessage(game.getWhiteScore(), game.getBlackScore()) + "\n" +
             getStatsMessage(result, statsResult);
         embed.setDescription(desc);
 
@@ -78,7 +78,7 @@ public class GameResultView {
         var embed = new EmbedBuilder();
 
         var desc = getMoveMessage(result.winner(), move.toString()) +
-            getScoreMessage(game.whiteScore(), game.blackScore());
+            getScoreMessage(game.getWhiteScore(), game.getBlackScore());
         embed.setDescription(desc);
 
         return new GameView(embed)

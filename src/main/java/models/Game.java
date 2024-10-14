@@ -4,6 +4,7 @@
 
 package models;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import domain.OthelloBoard;
@@ -11,6 +12,7 @@ import domain.Tile;
 
 import java.util.List;
 
+@Data
 @ToString
 @EqualsAndHashCode
 public class Game {
@@ -42,31 +44,19 @@ public class Game {
         return copiedGame;
     }
 
-    public OthelloBoard board() {
-        return board;
-    }
-
-    public Player whitePlayer() {
-        return whitePlayer;
-    }
-
-    public Player blackPlayer() {
-        return blackPlayer;
-    }
-
-    public Player currentPlayer() {
+    public Player getCurrentPlayer() {
         return board.isBlackMove() ? blackPlayer : whitePlayer;
     }
 
-    public Player otherPlayer() {
+    public Player getOtherPlayer() {
         return board.isBlackMove() ? whitePlayer : blackPlayer;
     }
 
-    public int blackScore() {
+    public int getBlackScore() {
         return (int) board.blackScore();
     }
 
-    public int whiteScore() {
+    public int getWhiteScore() {
         return (int) board.whiteScore();
     }
 
@@ -102,7 +92,7 @@ public class Game {
     }
 
     public Result createResult() {
-        var diff = blackScore() - whiteScore();
+        var diff = getBlackScore() - getWhiteScore();
         if (diff > 0) {
             return Result.WinLoss(blackPlayer, whitePlayer);
         } else if (diff < 0) {

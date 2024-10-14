@@ -64,7 +64,7 @@ public class TestMoveCommand {
         when(mock_cmdCtx.getPlayer()).thenReturn(callingPlayer);
 
         var spy_game = spy(Game.start(botPlayer, callingPlayer));
-        when(spy_game.currentPlayer()).thenReturn(botPlayer);
+        when(spy_game.getCurrentPlayer()).thenReturn(botPlayer);
 
         Answer<CompletableFuture<Tile.Move>> stubbedFindMove = invocation -> {
             // mock the response from the agent to be anything - this test doesn't need to know what it is
@@ -81,7 +81,7 @@ public class TestMoveCommand {
         verify(mock_gameService).makeMove(callingPlayer, Tile.fromNotation("c4"));
         verify(spy_moveCommand).buildMoveView(spy_game);
         verify(spy_moveCommand).doBotMove(mock_cmdCtx, spy_game);
-        verify(mock_agentDispatcher).findMove(eq(spy_game.board()), eq(1));
+        verify(mock_agentDispatcher).findMove(eq(spy_game.getBoard()), eq(1));
     }
 
     @Test
@@ -96,8 +96,8 @@ public class TestMoveCommand {
 
         var spy_game = spy(Game.start(blackPlayer, whitePlayer));
         when(spy_game.isOver()).thenReturn(true);
-        when(spy_game.whiteScore()).thenReturn(19);
-        when(spy_game.blackScore()).thenReturn(21);
+        when(spy_game.getWhiteScore()).thenReturn(19);
+        when(spy_game.getBlackScore()).thenReturn(21);
 
         when(mock_statsService.writeStats(any())).thenReturn(new Stats.Result());
         when(mock_gameService.makeMove(any(), any())).thenReturn(spy_game);

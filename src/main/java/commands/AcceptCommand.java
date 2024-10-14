@@ -31,7 +31,7 @@ public class AcceptCommand extends CommandHandler {
 
         try {
             var game = gameService.createGame(player, opponent);
-            var image = BoardRenderer.drawBoard(game.board());
+            var image = BoardRenderer.drawBoard(game.getBoard());
 
             var view = GameStateView.createGameStartView(game, image);
             ctx.replyView(view);

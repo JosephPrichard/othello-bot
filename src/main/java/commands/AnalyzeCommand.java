@@ -49,10 +49,10 @@ public class AnalyzeCommand extends CommandHandler {
             LOGGER.info("Starting board state analysis");
 
             try {
-                var future = agentDispatcher.findMoves(game.board(), depth);
+                var future = agentDispatcher.findMoves(game.getBoard(), depth);
                 var rankedMoves = future.get();
 
-                var image = BoardRenderer.drawBoardAnalysis(game.board(), rankedMoves);
+                var image = BoardRenderer.drawBoardAnalysis(game.getBoard(), rankedMoves);
                 var view = GameStateView.createAnalysisView(game, image, finalLevel, player);
 
                 view.editUsingHook(hook);

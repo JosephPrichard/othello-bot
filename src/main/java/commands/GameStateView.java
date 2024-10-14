@@ -14,16 +14,16 @@ import java.awt.image.BufferedImage;
 public class GameStateView {
 
     private static String getScoreText(Game game) {
-        return "Black: " + game.blackScore() + " points \n" + "White: " + game.whiteScore() + " points \n";
+        return "Black: " + game.getBlackScore() + " points \n" + "White: " + game.getWhiteScore() + " points \n";
     }
 
     private static String getTag(Player player) {
-        return player.isBot() ? "" : "<@" + player + ">";
+        return player.isBot() ? "" : player.toAtString();
     }
 
     public static GameView createGameStartView(Game game, BufferedImage image) {
-        var desc = "Black: " + game.blackPlayer().name() + "\n " +
-            "White: " + game.whitePlayer().name() + "\n " +
+        var desc = "Black: " + game.getBlackPlayer().getName() + "\n " +
+            "White: " + game.getWhitePlayer().getName() + "\n " +
             "Use `/view` to view the game and use `/move` to make a move.";
         var embed = new EmbedBuilder()
             .setTitle("Game started!")
@@ -33,8 +33,8 @@ public class GameStateView {
     }
 
     public static GameView createSimulationStartView(Game game, BufferedImage image) {
-        var desc = "Black: " + game.blackPlayer().name() + "\n " +
-            "White: " + game.whitePlayer().name();
+        var desc = "Black: " + game.getBlackPlayer().getName() + "\n " +
+            "White: " + game.getWhitePlayer().getName();
         var embed = new EmbedBuilder()
             .setTitle("Simulation started!")
             .setDescription(desc);
@@ -46,20 +46,20 @@ public class GameStateView {
         var desc = getScoreText(game) + "Your opponent has moved: " + move;
 
         var embed = new EmbedBuilder()
-            .setTitle("Your game with " + game.otherPlayer().name())
+            .setTitle("Your game with " + game.getOtherPlayer().getName())
             .setDescription(desc)
             .setFooter(game.isBlackMove() ? "Black to move" : "White to move");
 
         return new GameView(embed)
-            .setMessage(getTag(game.currentPlayer()))
+            .setMessage(getTag(game.getCurrentPlayer()))
             .setImage(image);
     }
 
     public static GameView createSimulationView(Game game, Tile move, BufferedImage image) {
-        var desc = getScoreText(game) + game.otherPlayer().name() + " has moved: " + move;
+        var desc = getScoreText(game) + game.getOtherPlayer().getName() + " has moved: " + move;
 
         var embed = new EmbedBuilder()
-            .setTitle(game.blackPlayer().name() + " vs " + game.whitePlayer().name())
+            .setTitle(game.getBlackPlayer().getName() + " vs " + game.getWhitePlayer().getName())
             .setDescription(desc)
             .setFooter(game.isBlackMove() ? "Black to move" : "White to move");
 
@@ -67,15 +67,15 @@ public class GameStateView {
     }
 
     public static GameView createGameView(Game game, BufferedImage image) {
-        var desc = getScoreText(game) + game.currentPlayer().name() + " to move";
+        var desc = getScoreText(game) + game.getCurrentPlayer().getName() + " to move";
 
         var embed = new EmbedBuilder()
-            .setTitle(game.blackPlayer().name() + " vs " + game.whitePlayer().name())
+            .setTitle(game.getBlackPlayer().getName() + " vs " + game.getWhitePlayer().getName())
             .setDescription(desc)
             .setFooter(game.isBlackMove() ? "Black to move" : "White to move");
 
         return new GameView(embed)
-            .setMessage(getTag(game.currentPlayer()))
+            .setMessage(getTag(game.getCurrentPlayer()))
             .setImage(image);
     }
 

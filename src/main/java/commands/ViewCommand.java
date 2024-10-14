@@ -25,7 +25,7 @@ public class ViewCommand extends CommandHandler {
             return;
         }
 
-        var board = game.board();
+        var board = game.getBoard();
         var potentialMoves = board.findPotentialMoves();
 
         var image = BoardRenderer.drawBoard(board, potentialMoves);

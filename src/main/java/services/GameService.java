@@ -68,8 +68,8 @@ public class GameService {
 
         try {
             var optGame = Optional.of(game);
-            games.put(game.blackPlayer().id(), optGame);
-            games.put(game.whitePlayer().id(), optGame);
+            games.put(game.getBlackPlayer().getId(), optGame);
+            games.put(game.getWhitePlayer().getId(), optGame);
         } catch (PersistenceException ex) {
             throw new AlreadyPlayingException();
         }
@@ -87,8 +87,8 @@ public class GameService {
 
         try {
             var optGame = Optional.of(game);
-            games.put(game.blackPlayer().id(), optGame);
-            games.put(game.whitePlayer().id(), optGame);
+            games.put(game.getBlackPlayer().getId(), optGame);
+            games.put(game.getWhitePlayer().getId(), optGame);
         } catch (PersistenceException ex) {
             throw new AlreadyPlayingException();
         }
@@ -97,7 +97,7 @@ public class GameService {
 
     @Nullable
     public Game getGame(Player player) {
-        var game = games.get(player.id()).orElse(null);
+        var game = games.get(player.getId()).orElse(null);
         if (game == null) {
             return null;
         }
@@ -107,25 +107,25 @@ public class GameService {
     }
 
     public void deleteGame(Game game) {
-        games.invalidate(game.whitePlayer().id());
-        games.invalidate(game.blackPlayer().id());
+        games.invalidate(game.getWhitePlayer().getId());
+        games.invalidate(game.getBlackPlayer().getId());
     }
 
     public boolean isPlaying(Player player) {
-        return games.get(player.id()).isPresent();
+        return games.get(player.id).isPresent();
     }
 
     // Responsible for making the given move on the player's game. Updates the game in the storage if
     // the game is not complete, deletes the game in the storage if the game is complete
     // returns a mutable copy of the game from the storage
     public Game makeMove(Player player, Tile move) throws NotPlayingException, InvalidMoveException, TurnException {
-        var game = games.get(player.id()).orElse(null);
+        var game = games.get(player.getId()).orElse(null);
         if (game == null) {
             throw new NotPlayingException();
         }
 
         synchronized (game) {
-            if (!game.currentPlayer().equals(player)) {
+            if (!game.getCurrentPlayer().equals(player)) {
                 throw new TurnException();
             }
 
@@ -152,7 +152,7 @@ public class GameService {
 
     private void onGameExpiry(Game game) {
         // call the stats service to update the stats where the current player loses
-        var forfeitResult = Game.Result.WinLoss(game.otherPlayer(), game.currentPlayer());
+        var forfeitResult = Game.Result.WinLoss(game.getOtherPlayer(), game.getCurrentPlayer());
         statsService.writeStats(forfeitResult);
     }
 }

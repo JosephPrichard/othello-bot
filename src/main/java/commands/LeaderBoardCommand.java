@@ -30,8 +30,8 @@ public class LeaderBoardCommand extends CommandHandler {
         var count = 1;
         for (var stats : statsList) {
             desc.append(rightPad(count + ")", 4))
-                .append(leftPad(stats.player().name(), 32))
-                .append(leftPad(String.format("%.2f", stats.elo()), 12))
+                .append(leftPad(stats.getPlayer().getName(), 32))
+                .append(leftPad(String.format("%.2f", stats.elo), 12))
                 .append("\n");
             count++;
         }

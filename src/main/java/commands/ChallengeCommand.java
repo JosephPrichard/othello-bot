@@ -21,16 +21,14 @@ public class ChallengeCommand extends CommandHandler {
     private final GameService gameService;
     private final ChallengeScheduler challengeScheduler;
 
-    public static String buildChallengeStr(Player challenged, Player challenger) {
-        return "<@" +
-            challenged.id() +
-            ">, " +
-            challenger.name() +
+    private static String buildChallengeStr(Player challenged, Player challenger) {
+        return challenged.toAtString() +
+            ", " +
+            challenger.getName() +
             " has challenged you to a game of Othello. " +
             "Type `/accept` " +
-            "<@" +
-            challenger.id() +
-            ">, " +
+            challenger.toAtString() +
+            ", " +
             "or ignore to decline.";
     }
 
@@ -58,7 +56,7 @@ public class ChallengeCommand extends CommandHandler {
 
         try {
             var game = gameService.createBotGame(player, level);
-            var image = BoardRenderer.drawBoardMoves(game.board());
+            var image = BoardRenderer.drawBoardMoves(game.getBoard());
 
             var view = GameStateView.createGameStartView(game, image);
             ctx.replyView(view);
@@ -74,8 +72,7 @@ public class ChallengeCommand extends CommandHandler {
 
         var player = ctx.getPlayer();
 
-        var id = player.id();
-        Runnable onExpiry = () -> ctx.sendView("<@" + id + "> Challenge timed out!");
+        Runnable onExpiry = () -> ctx.sendView(player.toAtString() + " Challenge timed out!");
         challengeScheduler.createChallenge(new Challenge(opponent, player), onExpiry);
 
         var message = buildChallengeStr(opponent, player);

@@ -24,12 +24,12 @@ public class StatsCommand extends CommandHandler {
     public static MessageEmbed buildStatsEmbed(Stats stats, User author) {
         var embed = new EmbedBuilder();
         embed.setColor(Color.GREEN)
-            .setTitle(stats.player().name() + "'s stats")
-            .addField("Rating", Float.toString(stats.elo()), false)
+            .setTitle(stats.player.getName() + "'s stats")
+            .addField("Rating", Float.toString(stats.elo), false)
             .addField("Win Rate", stats.winRate() + "%", false)
-            .addField("Won", Integer.toString(stats.won()), true)
-            .addField("Lost", Integer.toString(stats.lost()), true)
-            .addField("Drawn", Integer.toString(stats.drawn()), true)
+            .addField("Won", Integer.toString(stats.won), true)
+            .addField("Lost", Integer.toString(stats.lost), true)
+            .addField("Drawn", Integer.toString(stats.drawn), true)
             .setThumbnail(author.getAvatarUrl());
         return embed.build();
     }
@@ -46,6 +46,6 @@ public class StatsCommand extends CommandHandler {
         var embed = buildStatsEmbed(stats, user);
         ctx.replyEmbeds(embed);
 
-        LOGGER.info("Retrieved stats for " + stats.player());
+        LOGGER.info("Retrieved stats for " + stats.player);
     }
 }

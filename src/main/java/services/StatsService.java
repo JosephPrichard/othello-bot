@@ -24,7 +24,7 @@ public class StatsService {
     }
 
     public Stats readStats(Player player) {
-        var statsEntity = statsDao.getOrSaveStats(player.id());
+        var statsEntity = statsDao.getOrSaveStats(player.id);
         // we assume the tag can be loaded, so we throw an exception if it cannot be read
         var tag = userFetcher.fetchUsername(statsEntity.playerId).join();
         return new Stats(statsEntity, tag);
@@ -72,8 +72,8 @@ public class StatsService {
     }
 
     public Stats.Result writeStats(Game.Result result) {
-        var win = statsDao.getOrSaveStats(result.winner().id());
-        var loss = statsDao.getOrSaveStats(result.loser().id());
+        var win = statsDao.getOrSaveStats(result.winner().id);
+        var loss = statsDao.getOrSaveStats(result.loser().id);
 
         if (result.isDraw() || result.winner().equals(result.loser())) {
             // draw games don't need to update the elo, nor do games against self

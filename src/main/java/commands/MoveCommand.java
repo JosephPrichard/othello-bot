@@ -29,29 +29,29 @@ public class MoveCommand extends CommandHandler {
     private final AgentDispatcher agentDispatcher;
 
     public GameView buildMoveView(Game game, Tile move) {
-        var image = BoardRenderer.drawBoardMoves(game.board());
+        var image = BoardRenderer.drawBoardMoves(game.getBoard());
         return GameStateView.createGameView(game, move, image);
     }
 
     public GameView buildMoveView(Game game) {
-        var image = BoardRenderer.drawBoardMoves(game.board());
+        var image = BoardRenderer.drawBoardMoves(game.getBoard());
         return GameStateView.createGameView(game, image);
     }
 
     public GameView onGameOver(Game game, Tile move) {
         var result = game.createResult();
         var statsResult = statsService.writeStats(result);
-        var image = BoardRenderer.drawBoard(game.board());
+        var image = BoardRenderer.drawBoard(game.getBoard());
         return GameResultView.createGameOverView(result, statsResult, move, game, image);
     }
 
     public void doBotMove(CommandContext ctx, Game game) {
-        var currPlayer = game.currentPlayer();
-        var depth = Player.Bot.getDepthFromId(currPlayer.id());
+        var currPlayer = game.getCurrentPlayer();
+        var depth = Player.Bot.getDepthFromId(currPlayer.id);
 
         try {
             // queue an agent request which will find the best move, make the move, and send back a response
-            var future = agentDispatcher.findMove(game.board(), depth);
+            var future = agentDispatcher.findMove(game.getBoard(), depth);
             var bestMove = future.get();
 
             var newGame = gameService.makeMove(currPlayer, bestMove.tile());
