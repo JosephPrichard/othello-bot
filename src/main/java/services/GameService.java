@@ -8,9 +8,9 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.benmanes.caffeine.cache.RemovalCause;
 import com.github.benmanes.caffeine.cache.Scheduler;
+import domain.Tile;
 import models.Game;
 import models.Player;
-import domain.Tile;
 
 import javax.annotation.Nullable;
 import javax.persistence.PersistenceException;

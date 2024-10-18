@@ -2,14 +2,15 @@
  * Copyright (c) Joseph Prichard 2024.
  */
 
-package command;
+package discord;
 
-import models.Game;
-import models.Player;
 import domain.BoardRenderer;
 import domain.Tile;
+import models.Game;
+import models.Player;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
-import services.*;
+import services.BotState;
+import services.GameService;
 import utils.EventUtils;
 
 import java.util.Objects;

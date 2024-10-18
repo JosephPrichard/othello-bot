@@ -2,26 +2,27 @@
  * Copyright (c) Joseph Prichard 2024.
  */
 
-package command;
+package discord;
 
-import lombok.AllArgsConstructor;
-import net.dv8tion.jda.api.interactions.InteractionHook;
 import domain.BoardRenderer;
 import domain.OthelloBoard;
 import models.Game;
 import models.Player;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import services.BotState;
 import utils.EventUtils;
 
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import static utils.LogUtils.LOGGER;
 
-@AllArgsConstructor
 public class SimulateHandler {
 
     public static final long MAX_DELAY = 5000L;

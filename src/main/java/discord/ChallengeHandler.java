@@ -2,22 +2,20 @@
  * Copyright (c) Joseph Prichard 2024.
  */
 
-package command;
+package discord;
 
 import domain.BoardRenderer;
-import lombok.AllArgsConstructor;
 import models.Challenge;
+import models.Player;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import services.BotState;
 import services.GameService;
-import models.Player;
 import utils.EventUtils;
 
 import java.util.Objects;
 
 import static utils.LogUtils.LOGGER;
 
-@AllArgsConstructor
 public class ChallengeHandler {
 
     public static void handle(BotState state, SlashCommandInteraction event) {

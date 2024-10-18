@@ -2,10 +2,9 @@
  * Copyright (c) Joseph Prichard 2024.
  */
 
-package command;
+package discord;
 
 import domain.OthelloBoard;
-import lombok.AllArgsConstructor;
 import models.Player;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.CommandAutoCompleteInteraction;
@@ -14,7 +13,6 @@ import services.BotState;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 public class AutoCompleteHandler {
     public static void handleMove(BotState state, CommandAutoCompleteInteraction interaction) {
         var gameService = state.getGameService();

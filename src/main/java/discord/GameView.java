@@ -2,7 +2,7 @@
  * Copyright (c) Joseph Prichard 2024.
  */
 
-package command;
+package discord;
 
 import domain.Tile;
 import lombok.Getter;

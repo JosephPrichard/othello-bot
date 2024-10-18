@@ -4,7 +4,7 @@
 
 package utils;
 
-import command.GameView;
+import discord.GameView;
 import models.Player;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;

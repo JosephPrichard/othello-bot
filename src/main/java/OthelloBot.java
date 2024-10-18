@@ -2,7 +2,7 @@
  * Copyright (c) Joseph Prichard 2023.
  */
 
-import command.*;
+import discord.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
 
-import static command.SimulateHandler.MAX_DELAY;
-import static command.SimulateHandler.MIN_DELAY;
+import static discord.SimulateHandler.MAX_DELAY;
+import static discord.SimulateHandler.MIN_DELAY;
 import static models.Player.Bot.MAX_BOT_LEVEL;
 import static utils.LogUtils.LOGGER;
 

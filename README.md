@@ -1,12 +1,12 @@
 # OthelloBot
 
-OthelloBot is a self-hosted Discord Bot used to play othello in command text channels against other players or a bot. It includes graphical interface to see the othello board and a database with statistics for each player.
+OthelloBot is a self-hosted Discord Bot used to play othello in discord text channels against other players or a bot. It includes graphical interface to see the othello board and a database with statistics for each player.
 
 ## Commands
 
 `/challenge @user`
 
-Challenges another user to an othello game. Another player can accept the challenge with the `/accept` command.
+Challenges another user to an othello game. Another player can accept the challenge with the `/accept` discord.
 
 `/challengebot level`
 

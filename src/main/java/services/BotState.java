@@ -2,17 +2,14 @@
  * Copyright (c) Joseph Prichard 2024.
  */
 
-package services;import lombok.AllArgsConstructor;
+package services;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.dv8tion.jda.api.JDA;
 
-import java.io.InputStream;
-import java.util.Scanner;
 import java.util.concurrent.*;
-import java.util.logging.Level;
-
-import static utils.LogUtils.LOGGER;
 
 @Data
 @NoArgsConstructor

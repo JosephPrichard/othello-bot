@@ -4,11 +4,11 @@
 
 package models;
 
+import domain.OthelloBoard;
+import domain.Tile;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import domain.OthelloBoard;
-import domain.Tile;
 
 import java.util.List;
 
