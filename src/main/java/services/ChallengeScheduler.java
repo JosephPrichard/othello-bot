@@ -9,7 +9,7 @@ import models.Challenge;
 import java.util.Map;
 import java.util.concurrent.*;
 
-import static utils.Log.LOGGER;
+import static utils.LogUtils.LOGGER;
 
 public class ChallengeScheduler {
 

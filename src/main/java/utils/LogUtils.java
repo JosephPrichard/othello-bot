@@ -4,7 +4,7 @@
 
 package utils;
 
-public class Log {
+public class LogUtils {
 
     public static final java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger("logger");
 }

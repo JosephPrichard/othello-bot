@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-import static utils.Log.LOGGER;
+import static utils.LogUtils.LOGGER;
 
 public class GameService {
 

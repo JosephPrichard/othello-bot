@@ -11,7 +11,7 @@ import domain.Tile;
 import java.util.List;
 import java.util.concurrent.*;
 
-import static utils.Log.LOGGER;
+import static utils.LogUtils.LOGGER;
 
 public class AgentDispatcher {
     private final ExecutorService cpuBndExecutor;

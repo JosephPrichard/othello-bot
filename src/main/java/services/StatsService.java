@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static utils.Log.LOGGER;
+import static utils.LogUtils.LOGGER;
 
 public class StatsService {
 

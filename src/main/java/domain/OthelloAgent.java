@@ -6,7 +6,7 @@ package domain;
 
 import java.util.*;
 
-import static utils.Log.LOGGER;
+import static utils.LogUtils.LOGGER;
 
 public final class OthelloAgent {
 
